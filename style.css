@@ -1,28 +1,57 @@
+/* =========================
+   هوية منصة نقطة س
+   أ. رتاج السعيدية
+   ========================= */
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: Tahoma, Arial, sans-serif;
     direction: rtl;
     margin: 0;
     background-color: #fff9f5;
     color: #4a3f42;
 }
 
+/* =========================
+   رأس الصفحة
+   ========================= */
+
 header {
     background-color: #f8c8dc;
     color: #4a3f42;
     text-align: center;
-    padding: 35px;
+    padding: 35px 20px 30px;
     border-bottom: 6px solid #f9d84a;
 }
 
-h1 {
+/* اسم المنصة */
+
+header h1 {
     margin: 0;
-    font-size: 42px;
+    font-size: 44px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
+
+/* الوصف */
 
 header p {
     font-size: 19px;
-    margin-top: 10px;
+    margin: 10px 0 5px;
 }
+
+/* اسم المعلمة */
+
+.teacher-name {
+    display: block;
+    margin-top: 12px;
+    font-size: 21px;
+    font-weight: bold;
+    color: #8f5c70;
+}
+
+/* =========================
+   المحتوى الرئيسي
+   ========================= */
 
 .container {
     width: 90%;
@@ -30,18 +59,27 @@ header p {
     margin: 35px auto;
 }
 
+/* =========================
+   البطاقات
+   ========================= */
+
 .card {
     background-color: white;
     padding: 25px;
     margin-bottom: 20px;
     border-radius: 20px;
     border: 2px solid #f9d84a;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .card h2 {
-    color: #e9a6bd;
+    color: #e09ab5;
+    margin-top: 0;
 }
+
+/* =========================
+   أزرار الصفوف والوحدات
+   ========================= */
 
 .grade-card {
     display: flex;
@@ -66,9 +104,11 @@ header p {
     font-size: 24px;
     font-weight: bold;
 
-    box-shadow: 0 5px 12px rgba(0,0,0,0.12);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
 
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 .grade-card span {
@@ -81,41 +121,55 @@ header p {
 }
 
 .grade-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+/* =========================
+   هوية المنصة في أسفل الصفحة
+   ========================= */
 
-    <title>نقطة س</title>
+footer {
+    text-align: center;
+    padding: 25px 15px;
+    margin-top: 40px;
 
-    <link rel="stylesheet" href="style.css">
-</head>
+    color: #8f5c70;
+    font-size: 16px;
+}
 
-<body>
+footer strong {
+    color: #d889a7;
+}
 
-    <header>
-        <h1>نقطة س</h1>
-        <p>منصتك التعليمية للرياضيات</p>
-    </header>
+/* =========================
+   مناسب للجوال والآيباد
+   ========================= */
 
-    <main class="container">
+@media (max-width: 600px) {
 
-        <div class="card">
+    header {
+        padding: 28px 15px 25px;
+    }
 
-            <h2>📚 اختر صفك</h2>
+    header h1 {
+        font-size: 36px;
+    }
 
-            <a href="grade10.html" class="grade-card">
-                <span>📚</span>
-                <strong>الصف العاشر</strong>
-            </a>
+    header p {
+        font-size: 17px;
+    }
 
-        </div>
+    .teacher-name {
+        font-size: 19px;
+    }
 
-    </main>
+    .container {
+        width: 92%;
+    }
 
-</body>
-</html>
+    .grade-card {
+        width: 85%;
+        max-width: 250px;
+    }
+}
