@@ -1,93 +1,200 @@
-/* =========================
+/* ================================
    هوية منصة نقطة س
    أ. رتاج السعيدية
-   ========================= */
+   ================================ */
 
 body {
     font-family: Tahoma, Arial, sans-serif;
     direction: rtl;
     margin: 0;
-    background-color: #fff9f5;
+    background-color: #fffaf7;
     color: #4a3f42;
 }
 
-/* =========================
-   رأس الصفحة
-   ========================= */
+
+/* ================================
+   الشريط العلوي
+   ================================ */
 
 header {
-    background-color: #f8c8dc;
-    color: #4a3f42;
+    position: relative;
+    overflow: hidden;
+
+    background: #ffffff;
+
     text-align: center;
-    padding: 35px 20px 30px;
-    border-bottom: 6px solid #f9d84a;
+
+    padding: 45px 20px 35px;
+
+    border-bottom: 5px solid #f9d84a;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
-/* اسم المنصة */
+
+/* المعادلات والرموز في الخلفية */
+
+header::before {
+    content:
+        "x² + y²     π     √x     ∑     2x + 5     ∞     ÷";
+
+    position: absolute;
+
+    top: 12px;
+    left: 0;
+
+    width: 100%;
+
+    color: #f3c8d8;
+
+    font-size: 18px;
+
+    letter-spacing: 8px;
+
+    white-space: nowrap;
+
+    opacity: 0.65;
+
+    pointer-events: none;
+}
+
+
+/* السطر الثاني من الرموز */
+
+header::after {
+    content:
+        "📖     △     ∫     %     📐     =     📚";
+
+    position: absolute;
+
+    bottom: 8px;
+    left: 0;
+
+    width: 100%;
+
+    color: #e9c95b;
+
+    font-size: 17px;
+
+    letter-spacing: 7px;
+
+    white-space: nowrap;
+
+    opacity: 0.55;
+
+    pointer-events: none;
+}
+
+
+/* ================================
+   اسم المنصة
+   ================================ */
 
 header h1 {
-    margin: 0;
-    font-size: 44px;
+    position: relative;
+
+    z-index: 2;
+
+    margin: 15px 0 5px;
+
+    font-size: 46px;
+
     font-weight: bold;
+
+    color: #d982a5;
+
     letter-spacing: 1px;
 }
+
 
 /* الوصف */
 
 header p {
+    position: relative;
+
+    z-index: 2;
+
+    margin: 8px 0;
+
     font-size: 19px;
-    margin: 10px 0 5px;
+
+    color: #5b5054;
 }
+
 
 /* اسم المعلمة */
 
 .teacher-name {
+    position: relative;
+
+    z-index: 2;
+
     display: block;
+
     margin-top: 12px;
+
     font-size: 21px;
+
     font-weight: bold;
-    color: #8f5c70;
+
+    color: #9b6278;
 }
 
-/* =========================
-   المحتوى الرئيسي
-   ========================= */
+
+/* ================================
+   المحتوى
+   ================================ */
 
 .container {
     width: 90%;
     max-width: 900px;
+
     margin: 35px auto;
 }
 
-/* =========================
+
+/* ================================
    البطاقات
-   ========================= */
+   ================================ */
 
 .card {
-    background-color: white;
+    background-color: #ffffff;
+
     padding: 25px;
+
     margin-bottom: 20px;
+
     border-radius: 20px;
+
     border: 2px solid #f9d84a;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.07);
 }
 
+
 .card h2 {
-    color: #e09ab5;
+    color: #d98aa8;
+
     margin-top: 0;
 }
 
-/* =========================
-   أزرار الصفوف والوحدات
-   ========================= */
+
+/* ================================
+   أزرار الصفوف والوحدات والدروس
+   ================================ */
 
 .grade-card {
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
     width: 250px;
+
     min-height: 150px;
 
     margin: 30px auto;
@@ -99,77 +206,112 @@ header p {
     text-decoration: none !important;
 
     border: none;
+
     border-radius: 20px;
 
     font-size: 24px;
+
     font-weight: bold;
 
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.12);
 
     cursor: pointer;
 
     transition: 0.2s ease;
 }
 
+
 .grade-card span {
     font-size: 35px;
+
     margin-bottom: 10px;
 }
+
 
 .grade-card strong {
     color: #4a3f42;
 }
 
+
 .grade-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+    box-shadow:
+        0 8px 17px rgba(0, 0, 0, 0.15);
 }
 
-/* =========================
-   هوية المنصة في أسفل الصفحة
-   ========================= */
+
+/* ================================
+   أسفل الصفحة
+   ================================ */
 
 footer {
     text-align: center;
+
     padding: 25px 15px;
+
     margin-top: 40px;
 
     color: #8f5c70;
+
     font-size: 16px;
 }
 
+
 footer strong {
-    color: #d889a7;
+    color: #d982a5;
 }
 
-/* =========================
-   مناسب للجوال والآيباد
-   ========================= */
+
+/* ================================
+   الجوال
+   ================================ */
 
 @media (max-width: 600px) {
 
     header {
-        padding: 28px 15px 25px;
+        padding: 40px 12px 32px;
     }
+
 
     header h1 {
         font-size: 36px;
     }
 
+
     header p {
         font-size: 17px;
     }
+
 
     .teacher-name {
         font-size: 19px;
     }
 
+
+    header::before {
+        font-size: 13px;
+
+        letter-spacing: 3px;
+    }
+
+
+    header::after {
+        font-size: 13px;
+
+        letter-spacing: 3px;
+    }
+
+
     .container {
         width: 92%;
     }
 
+
     .grade-card {
         width: 85%;
+
         max-width: 250px;
     }
 }
