@@ -67,6 +67,41 @@ button:hover {
     font-size: 16px;
     font-weight: bold;
 }
+.grade-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    min-height: 150px;
+    margin: 20px auto;
+    background-color: #fff;
+    border: 3px solid #f9d84a;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #4a3f42;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+    transition: 0.2s;
+}
+
+.grade-card span {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.grade-card strong {
+    font-size: 22px;
+    color: #e9a6bd;
+}
+
+.grade-card small {
+    margin-top: 8px;
+    color: #777;
+}
+
+.grade-card:hover {
+    transform: translateY(-5px);
+}
 
 .button:hover {
     background-color: #f4c936;
