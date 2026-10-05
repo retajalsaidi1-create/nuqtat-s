@@ -9,7 +9,7 @@
 
 
     // ================================
-    // تشغيل Supabase
+    // تشغيل القائمة
     // ================================
 
     function startUserMenu() {
@@ -33,8 +33,9 @@
 
         let userMenu = document.querySelector(".user-menu");
 
-        // إذا الصفحة لا تحتوي على القائمة،
-        // ننشئها تلقائيًا
+
+        // إذا الصفحة لا تحتوي على دائرة المستخدم
+        // يتم إنشاؤها تلقائيًا
         if (!userMenu) {
 
             userMenu = document.createElement("div");
@@ -42,7 +43,7 @@
             userMenu.className = "user-menu";
 
             userMenu.innerHTML = `
-                
+
                 <button
                     class="user-button"
                     onclick="nuqtasToggleUserMenu()"
@@ -77,10 +78,31 @@
 
 
         // ================================
-        // جلب بيانات الطالب
+        // تحميل بيانات الطالب
         // ================================
 
         loadUser(client, userMenu);
+
+
+        // ================================
+        // إغلاق القائمة عند الضغط خارجها
+        // ================================
+
+        document.addEventListener("click", function (event) {
+
+            if (!userMenu.contains(event.target)) {
+
+                const dropdown =
+                    userMenu.querySelector(".user-dropdown");
+
+                if (dropdown) {
+                    dropdown.classList.remove("show");
+                }
+
+            }
+
+        });
+
     }
 
 
@@ -100,7 +122,10 @@
             } = await client.auth.getUser();
 
 
-            // إذا ما فيه مستخدم مسجل دخول
+            // ================================
+            // إذا لم يكن هناك تسجيل دخول
+            // ================================
+
             if (error || !user) {
 
                 window.location.href = "index.html";
@@ -109,15 +134,26 @@
             }
 
 
-            // عناصر القائمة
-            const avatar = userMenu.querySelector(".user-avatar");
-            const name = userMenu.querySelector("strong");
-            const email = userMenu.querySelector("span");
+            // ================================
+            // عناصر قائمة المستخدم
+            // ================================
+
+            const avatar =
+                userMenu.querySelector(".user-avatar");
+
+            const name =
+                userMenu.querySelector("strong");
+
+            const email =
+                userMenu.querySelector("span");
 
 
-            // عرض الإيميل
+            // عرض البريد الإلكتروني
             if (email) {
-                email.textContent = user.email || "";
+
+                email.textContent =
+                    user.email || "";
+
             }
 
 
@@ -135,13 +171,22 @@
                 .maybeSingle();
 
 
+            // ================================
+            // عرض اسم الطالب
+            // ================================
+
             if (!profileError && profile) {
 
-                // الاسم
-                if (profile.full_name && profile.full_name.trim() !== "") {
+                if (
+                    profile.full_name &&
+                    profile.full_name.trim() !== ""
+                ) {
 
                     if (name) {
-                        name.textContent = profile.full_name;
+
+                        name.textContent =
+                            profile.full_name;
+
                     }
 
 
@@ -149,7 +194,10 @@
                     if (avatar) {
 
                         avatar.textContent =
-                            profile.full_name.trim().charAt(0).toUpperCase();
+                            profile.full_name
+                                .trim()
+                                .charAt(0)
+                                .toUpperCase();
 
                     }
 
@@ -171,25 +219,31 @@
 
 
     // ================================
-    // فتح وإغلاق القائمة
+    // فتح وإغلاق قائمة المستخدم
     // ================================
 
     window.nuqtasToggleUserMenu = function () {
 
-        const userMenu = document.querySelector(".user-menu");
+        const userMenu =
+            document.querySelector(".user-menu");
+
 
         if (!userMenu) {
             return;
         }
 
+
         const dropdown =
             userMenu.querySelector(".user-dropdown");
+
 
         if (!dropdown) {
             return;
         }
 
+
         dropdown.classList.toggle("show");
+
     };
 
 
@@ -201,7 +255,9 @@
 
         try {
 
-            const client = window.nuqtasSupabase;
+            const client =
+                window.nuqtasSupabase;
+
 
             if (client) {
 
@@ -209,7 +265,10 @@
 
             }
 
-            window.location.href = "index.html";
+
+            window.location.href =
+                "index.html";
+
 
         } catch (error) {
 
@@ -218,47 +277,70 @@
                 error
             );
 
-            // حتى لو صار خطأ، نرجع لصفحة الدخول
-            window.location.href = "index.html";
+
+            // في حالة حدوث خطأ
+            // نرجع لصفحة تسجيل الدخول
+
+            window.location.href =
+                "index.html";
+
         }
 
     };
 
 
     // ================================
-    // إغلاق القائمة عند الضغط خارجها
+    // تحميل Supabase تلقائيًا
     // ================================
 
-    document.addEventListener("click", function (event) {
+    function loadSupabase() {
 
-        const userMenu =
-            document.querySelector(".user-menu");
+        // إذا Supabase موجود أصلًا
+        if (
+            window.supabase &&
+            window.supabase.createClient
+        ) {
 
-        if (!userMenu) {
+            startUserMenu();
+
             return;
         }
 
-        if (!userMenu.contains(event.target)) {
 
-            const dropdown =
-                userMenu.querySelector(".user-dropdown");
+        // إنشاء رابط تحميل Supabase
+        const script =
+            document.createElement("script");
 
-            if (dropdown) {
+        script.src =
+            "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
-                dropdown.classList.remove("show");
 
-            }
+        script.onload = function () {
 
-        }
+            startUserMenu();
 
-    });
+        };
+
+
+        script.onerror = function () {
+
+            console.error(
+                "تعذر تحميل Supabase."
+            );
+
+        };
+
+
+        document.head.appendChild(script);
+
+    }
 
 
     // ================================
-    // تشغيل
+    // بدء التشغيل
     // ================================
 
-    startUserMenu();
+    loadSupabase();
 
 
 })();
