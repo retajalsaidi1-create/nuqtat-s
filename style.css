@@ -57,3 +57,17 @@ button {
 button:hover {
     background-color: #f4c936;
 }
+.button {
+    display: inline-block;
+    background-color: #f9d84a;
+    color: #4a3f42;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #f4c936;
+}
