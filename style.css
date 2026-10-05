@@ -57,18 +57,40 @@ button {
 
 
 .grade-card {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
     width: 250px;
+    height: 150px;
+
     margin: 30px auto;
-    padding: 25px 10px;
+
     background-color: #f9d84a;
+
     color: #4a3f42;
-    text-decoration: none;
-    text-align: center;
+
+    text-decoration: none !important;
+
+    border: none;
+    border-radius: 20px;
+
     font-size: 24px;
     font-weight: bold;
-    border-radius: 15px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.10);
+
+    box-shadow: 0 5px 12px rgba(0,0,0,0.12);
+
+    cursor: pointer;
+}
+
+.grade-card span {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.grade-card strong {
+    color: #4a3f42;
 }
 
 .grade-card:hover {
