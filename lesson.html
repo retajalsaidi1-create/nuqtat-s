@@ -1,241 +1,92 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>الدرس - نقطة س</title>
+```
+<title>الدرس - نقطة س</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+```
+
 </head>
 
 <body>
 
-    <header>
-        <h1 id="lessonTitle">الدرس</h1>
-        <p id="unitTitle">نقطة س التعليمية</p>
-    </header>
+```
+<header>
+    <h1 id="lessonTitle">الدرس</h1>
+    <p id="unitTitle">نقطة س التعليمية</p>
+</header>
 
-    <main class="container">
+<main class="container">
 
-        <!-- 🎥 الفيديو -->
-        <div class="card">
+    <!-- 🎥 الفيديو -->
+    <div class="card">
 
-            <h2>🎥 شرح الدرس</h2>
+        <h2>🎥 شرح الدرس</h2>
+
+        <p>
+            شاهد فيديو شرح الدرس هنا.
+        </p>
+
+        <div id="videoBox">
 
             <p>
-                شاهد فيديو شرح الدرس هنا.
+                سيتم إضافة فيديو الشرح هنا.
             </p>
-
-            <div id="videoBox">
-
-                <p>
-                    سيتم إضافة فيديو الشرح هنا.
-                </p>
-
-            </div>
 
         </div>
 
-
-        <!-- 📄 الملخص -->
-        <div class="card">
-
-            <h2>📄 ملخص الدرس</h2>
-
-            <p>
-                يمكنك فتح ملخص الدرس بصيغة PDF هنا.
-            </p>
-
-            <a href="#" class="grade-card">
-                <span>📄</span>
-                <strong>فتح ملخص الدرس</strong>
-            </a>
-
-        </div>
+    </div>
 
 
-        <!-- 📝 الاختبار -->
-        <div class="card">
+    <!-- 📄 الملخص -->
+    <div class="card">
 
-            <h2>📝 اختبار الدرس</h2>
+        <h2>📄 ملخص الدرس</h2>
 
-            <p>
-                اختبر فهمك للدرس من خلال الأسئلة.
-            </p>
+        <p>
+            يمكنك فتح ملخص الدرس بصيغة PDF هنا.
+        </p>
 
-            <a href="#" class="grade-card">
-                <span>📝</span>
-                <strong>بدء الاختبار</strong>
-            </a>
-
-        </div>
-
-
-        <!-- ⬅️ العودة للوحدة -->
-        <a id="backButton" href="semester1.html" class="grade-card">
-            <span>⬅️</span>
-            <strong>العودة إلى الوحدة</strong>
+        <a href="#" class="grade-card">
+            <span>📄</span>
+            <strong>فتح ملخص الدرس</strong>
         </a>
 
-    </main>
+    </div>
 
 
-    <script>
+    <!-- 📝 الاختبار -->
+    <div class="card">
 
-        // معرفة رقم الدرس من الرابط
-        const params = new URLSearchParams(window.location.search);
+        <h2>📝 اختبار الدرس</h2>
 
-        const lessonNumber = params.get("lesson");
+        <p>
+            اختبر فهمك للدرس من خلال الأسئلة.
+        </p>
 
+        <a href="#" class="grade-card">
+            <span>📝</span>
+            <strong>بدء الاختبار</strong>
+        </a>
 
-        // بيانات الدروس
-        const lessons = {
-
-            1: {
-                title: "١-١ التمثيلات البيانية للتحويل",
-                unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
-                back: "unit1.html"
-            },
-
-            2: {
-                title: "١-٢ تمثيل المناطق في المستوى الإحداثي",
-                unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
-                back: "unit1.html"
-            },
-
-            3: {
-                title: "١-٣ البرمجة الخطية",
-                unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
-                back: "unit1.html"
-            },
-
-            4: {
-                title: "١-٤ المَيل",
-                unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
-                back: "unit1.html"
-            },
-
-            5: {
-                title: "١-٥ التمثيلات البيانية للحركة",
-                unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
-                back: "unit1.html"
-            },
+    </div>
 
 
-            6: {
-                title: "٢-١ جمع البيانات وتصنيفها",
-                unit: "الوحدة الثانية: جمع البيانات وتمثيلها",
-                back: "unit2.html"
-            },
+    <!-- ⬅️ العودة للوحدة -->
+    <a id="backButton" href="semester1.html" class="grade-card">
+        <span>⬅️</span>
+        <strong>العودة إلى الوحدة</strong>
+    </a>
 
-            7: {
-                title: "٢-٢ تنظيم البيانات",
-                unit: "الوحدة الثانية: جمع البيانات وتمثيلها",
-                back: "unit2.html"
-            },
-
-            8: {
-                title: "٢-٣ استخدام الجداول لعرض البيانات",
-                unit: "الوحدة الثانية: جمع البيانات وتمثيلها",
-                back: "unit2.html"
-            },
+</main>
 
 
-            9: {
-                title: "٣-١ الكسور الجبرية",
-                unit: "الوحدة الثالثة: المعالجة الجبرية",
-                back: "unit3.html"
-            },
-
-
-            10: {
-                title: "٤-١ خصائص التماثل في الدائرة",
-                unit: "الوحدة الرابعة: الدوائر",
-                back: "unit4.html"
-            },
-
-            11: {
-                title: "٤-٢ العلاقات بين الزوايا في الدائرة",
-                unit: "الوحدة الرابعة: الدوائر",
-                back: "unit4.html"
-            },
-
-
-            12: {
-                title: "٥-١ المقاييس الإحصائية",
-                unit: "الوحدة الخامسة: المقاييس الإحصائية والانتشار",
-                back: "unit5.html"
-            },
-
-            13: {
-                title: "٥-٢ الجداول التكرارية",
-                unit: "الوحدة الخامسة: المقاييس الإحصائية والانتشار",
-                back: "unit5.html"
-            },
-
-            14: {
-                title: "٥-٣ المئينيات والربيعات والمخطط الصندوقي",
-                unit: "الوحدة الخامسة: المقاييس الإحصائية والانتشار",
-                back: "unit5.html"
-            },
-
-
-            15: {
-                title: "٦-١ التناسب الطردي والتناسب العكسي في الحدود الجبرية",
-                unit: "الوحدة السادسة: التناسب",
-                back: "unit6.html"
-            },
-
-
-            16: {
-                title: "٧-١ بيانات بمتغيرين",
-                unit: "الوحدة السابعة: المزيد من التمثيلات الإحصائية",
-                back: "unit7.html"
-            },
-
-            17: {
-                title: "٧-٢ المدرج التكراري",
-                unit: "الوحدة السابعة: المزيد من التمثيلات الإحصائية",
-                back: "unit7.html"
-            },
-
-            18: {
-                title: "٧-٣ التكرار التراكمي",
-                unit: "الوحدة السابعة: المزيد من التمثيلات الإحصائية",
-                back: "unit7.html"
-            },
-
-
-            19: {
-                title: "٨-١ الدوال وصيغة الدالة",
-                unit: "الوحدة الثامنة: الدوال",
-                back: "unit8.html"
-            }
-
-        };
-
-
-        // عرض بيانات الدرس
-        if (lessons[lessonNumber]) {
-
-            document.getElementById("lessonTitle").textContent =
-                lessons[lessonNumber].title;
-
-            document.getElementById("unitTitle").textContent =
-                lessons[lessonNumber].unit;
-
-            document.getElementById("backButton").href =
-                lessons[lessonNumber].back;
-
-        }
-
-    </script>
-
-</body>
-
-</html>
 <footer>
 
     <p>
@@ -248,3 +99,164 @@
     </p>
 
 </footer>
+
+
+<!-- قائمة الطالب -->
+<script src="user-menu.js"></script>
+
+
+<script>
+
+    // معرفة رقم الدرس من الرابط
+    const params = new URLSearchParams(window.location.search);
+
+    const lessonNumber = params.get("lesson");
+
+
+    // بيانات الدروس
+    const lessons = {
+
+        1: {
+            title: "١-١ التمثيلات البيانية للتحويل",
+            unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
+            back: "unit1.html"
+        },
+
+        2: {
+            title: "١-٢ تمثيل المناطق في المستوى الإحداثي",
+            unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
+            back: "unit1.html"
+        },
+
+        3: {
+            title: "١-٣ البرمجة الخطية",
+            unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
+            back: "unit1.html"
+        },
+
+        4: {
+            title: "١-٤ المَيل",
+            unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
+            back: "unit1.html"
+        },
+
+        5: {
+            title: "١-٥ التمثيلات البيانية للحركة",
+            unit: "الوحدة الأولى: استخدام التمثيلات البيانية",
+            back: "unit1.html"
+        },
+
+
+        6: {
+            title: "٢-١ جمع البيانات وتصنيفها",
+            unit: "الوحدة الثانية: جمع البيانات وتمثيلها",
+            back: "unit2.html"
+        },
+
+        7: {
+            title: "٢-٢ تنظيم البيانات",
+            unit: "الوحدة الثانية: جمع البيانات وتمثيلها",
+            back: "unit2.html"
+        },
+
+        8: {
+            title: "٢-٣ استخدام الجداول لعرض البيانات",
+            unit: "الوحدة الثانية: جمع البيانات وتمثيلها",
+            back: "unit2.html"
+        },
+
+
+        9: {
+            title: "٣-١ الكسور الجبرية",
+            unit: "الوحدة الثالثة: المعالجة الجبرية",
+            back: "unit3.html"
+        },
+
+
+        10: {
+            title: "٤-١ خصائص التماثل في الدائرة",
+            unit: "الوحدة الرابعة: الدوائر",
+            back: "unit4.html"
+        },
+
+        11: {
+            title: "٤-٢ العلاقات بين الزوايا في الدائرة",
+            unit: "الوحدة الرابعة: الدوائر",
+            back: "unit4.html"
+        },
+
+
+        12: {
+            title: "٥-١ المقاييس الإحصائية",
+            unit: "الوحدة الخامسة: المقاييس الإحصائية والانتشار",
+            back: "unit5.html"
+        },
+
+        13: {
+            title: "٥-٢ الجداول التكرارية",
+            unit: "الوحدة الخامسة: المقاييس الإحصائية والانتشار",
+            back: "unit5.html"
+        },
+
+        14: {
+            title: "٥-٣ المئينيات والربيعات والمخطط الصندوقي",
+            unit: "الوحدة الخامسة: المقاييس الإحصائية والانتشار",
+            back: "unit5.html"
+        },
+
+
+        15: {
+            title: "٦-١ التناسب الطردي والتناسب العكسي في الحدود الجبرية",
+            unit: "الوحدة السادسة: التناسب",
+            back: "unit6.html"
+        },
+
+
+        16: {
+            title: "٧-١ بيانات بمتغيرين",
+            unit: "الوحدة السابعة: المزيد من التمثيلات الإحصائية",
+            back: "unit7.html"
+        },
+
+        17: {
+            title: "٧-٢ المدرج التكراري",
+            unit: "الوحدة السابعة: المزيد من التمثيلات الإحصائية",
+            back: "unit7.html"
+        },
+
+        18: {
+            title: "٧-٣ التكرار التراكمي",
+            unit: "الوحدة السابعة: المزيد من التمثيلات الإحصائية",
+            back: "unit7.html"
+        },
+
+
+        19: {
+            title: "٨-١ الدوال وصيغة الدالة",
+            unit: "الوحدة الثامنة: الدوال",
+            back: "unit8.html"
+        }
+
+    };
+
+
+    // عرض بيانات الدرس
+    if (lessons[lessonNumber]) {
+
+        document.getElementById("lessonTitle").textContent =
+            lessons[lessonNumber].title;
+
+        document.getElementById("unitTitle").textContent =
+            lessons[lessonNumber].unit;
+
+        document.getElementById("backButton").href =
+            lessons[lessonNumber].back;
+
+    }
+
+</script>
+```
+
+</body>
+
+</html>
