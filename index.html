@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>نقطة س | أ. رتاج السعيدية</title>
+    <title>تسجيل الدخول | نقطة س</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,7 +16,7 @@
 
         <h1>نقطة س</h1>
 
-        <p>منصتك التعليمية للرياضيات</p>
+        <p>منصتك لتعلّم الرياضيات</p>
 
         <span class="teacher-name">
             أ. رتاج السعيدية
@@ -25,19 +25,81 @@
     </header>
 
 
-    <main class="container">
+    <main class="login-container">
 
-        <div class="card">
+        <div class="login-card">
 
-            <h2>📚 اختر صفك</h2>
+            <div class="login-icon">
+                ✏️
+            </div>
 
-            <a href="grade10.html" class="grade-card">
+            <h2>مرحبًا بك في نقطة س 💗</h2>
 
-                <span>📚</span>
+            <p class="welcome-text">
+                سجّل دخولك للوصول إلى دروسك وملخصاتك واختباراتك.
+            </p>
 
-                <strong>الصف العاشر</strong>
 
-            </a>
+            <form onsubmit="enterSite(event)">
+
+                <label for="email">
+                    البريد الإلكتروني
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="أدخل بريدك الإلكتروني"
+                    required
+                >
+
+
+                <label for="password">
+                    كلمة المرور
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="أدخل كلمة المرور"
+                    required
+                >
+
+
+                <button type="submit" class="login-button">
+                    🔐 تسجيل الدخول
+                </button>
+
+            </form>
+
+
+            <div class="divider">
+                <span>أو</span>
+            </div>
+
+
+            <button
+                class="create-account"
+                onclick="showMessage()"
+            >
+                📝 إنشاء حساب جديد
+            </button>
+
+
+            <p id="message" class="message"></p>
+
+        </div>
+
+
+        <div class="login-note">
+
+            <span>📚</span>
+
+            <p>
+                تعلّم الرياضيات بطريقة أبسط
+                <br>
+                مع أ. رتاج السعيدية ✨
+            </p>
 
         </div>
 
@@ -56,6 +118,32 @@
         </p>
 
     </footer>
+
+
+    <script>
+
+        function enterSite(event) {
+
+            event.preventDefault();
+
+            /*
+             * حاليًا هذا مجرد نموذج تجريبي.
+             * لاحقًا سيتم ربط تسجيل الدخول
+             * بنظام الحسابات والاشتراكات.
+             */
+
+            window.location.href = "grade10.html";
+        }
+
+
+        function showMessage() {
+
+            document.getElementById("message").textContent =
+                "سيتم تفعيل إنشاء الحسابات قريبًا 💗";
+
+        }
+
+    </script>
 
 </body>
 
