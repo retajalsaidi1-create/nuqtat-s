@@ -315,3 +315,262 @@ footer strong {
         max-width: 250px;
     }
 }
+/* ================================
+   صفحة تسجيل الدخول
+   ================================ */
+
+.login-container {
+    width: 90%;
+    max-width: 500px;
+    margin: 50px auto;
+}
+
+
+/* بطاقة الدخول */
+
+.login-card {
+    background-color: #ffffff;
+
+    padding: 35px 30px;
+
+    border-radius: 25px;
+
+    border: 2px solid #f9d84a;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.08);
+
+    text-align: center;
+}
+
+
+/* الأيقونة */
+
+.login-icon {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #f8c8dc;
+
+    border-radius: 50%;
+
+    font-size: 35px;
+}
+
+
+/* عنوان الدخول */
+
+.login-card h2 {
+    margin: 10px 0;
+
+    color: #d982a5;
+
+    font-size: 27px;
+}
+
+
+/* النص الترحيبي */
+
+.welcome-text {
+    color: #777;
+
+    line-height: 1.8;
+
+    margin-bottom: 25px;
+}
+
+
+/* عناوين الحقول */
+
+.login-card label {
+    display: block;
+
+    text-align: right;
+
+    margin: 15px 0 7px;
+
+    font-weight: bold;
+
+    color: #5b5054;
+}
+
+
+/* الحقول */
+
+.login-card input {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 14px;
+
+    border: 2px solid #f1dce4;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    background-color: #fffafc;
+}
+
+
+.login-card input:focus {
+    border-color: #e5a8be;
+
+    box-shadow:
+        0 0 0 3px rgba(248, 200, 220, 0.25);
+}
+
+
+/* زر تسجيل الدخول */
+
+.login-button {
+    width: 100%;
+
+    margin-top: 25px;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background-color: #f9d84a;
+
+    color: #4a3f42;
+
+    font-size: 19px;
+
+    font-weight: bold;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+
+.login-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+
+/* الفاصل */
+
+.divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 25px 0;
+
+    color: #aaa;
+}
+
+
+.divider::before,
+.divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background-color: #eadde2;
+}
+
+
+/* إنشاء الحساب */
+
+.create-account {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 2px solid #f8c8dc;
+
+    border-radius: 14px;
+
+    background-color: #ffffff;
+
+    color: #9b6278;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+
+.create-account:hover {
+    background-color: #fff5f9;
+}
+
+
+/* الرسالة */
+
+.message {
+    color: #d982a5;
+
+    font-weight: bold;
+
+    margin-top: 15px;
+}
+
+
+/* الملاحظة أسفل البطاقة */
+
+.login-note {
+    text-align: center;
+
+    margin-top: 25px;
+
+    color: #8f5c70;
+
+    line-height: 1.8;
+}
+
+
+.login-note span {
+    font-size: 30px;
+}
+
+
+/* للجوال */
+
+@media (max-width: 600px) {
+
+    .login-container {
+        width: 92%;
+
+        margin: 35px auto;
+    }
+
+    .login-card {
+        padding: 30px 20px;
+    }
+
+    .login-card h2 {
+        font-size: 23px;
+    }
+
+}
