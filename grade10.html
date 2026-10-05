@@ -8,55 +8,316 @@
     <title>الصف العاشر - نقطة س</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* زر المستخدم */
+        .user-menu {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            z-index: 1000;
+        }
+
+        .user-button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        /* القائمة */
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 55px;
+            width: 230px;
+            background: white;
+            border-radius: 15px;
+            padding: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .user-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #f3dce5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-dropdown strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .user-dropdown span {
+            display: block;
+            font-size: 13px;
+            color: #777;
+            word-break: break-word;
+        }
+
+        .user-dropdown hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 15px 0;
+        }
+
+        .user-dropdown button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+        }
+    </style>
 </head>
 
 <body>
 
+    <!-- حساب الطالب -->
+    <div class="user-menu">
+
+        <button
+            type="button"
+            class="user-button"
+            onclick="toggleUserMenu()">
+            👤
+        </button>
+
+        <div id="userDropdown" class="user-dropdown">
+
+            <div
+                class="user-avatar"
+                id="userAvatar">
+                👤
+            </div>
+
+            <strong id="userName">
+                الطالب
+            </strong>
+
+            <span id="userEmail">
+                جاري التحميل...
+            </span>
+
+            <hr>
+
+            <button
+                type="button"
+                onclick="logout()">
+                🚪 تسجيل الخروج
+            </button>
+
+        </div>
+
+    </div>
+
+
     <header>
+
         <h1>الصف العاشر</h1>
-        <p>اختر الفصل الدراسي</p>
+
+        <p>
+            اختر الفصل الدراسي
+        </p>
+
     </header>
+
 
     <main class="container">
 
         <div class="card">
 
-            <h2>📚 الفصول الدراسية</h2>
+            <h2>
+                📚 الفصول الدراسية
+            </h2>
 
-            <!-- الفصل الدراسي الأول -->
-            <a href="semester1.html" class="grade-card">
+
+            <a
+                href="semester1.html"
+                class="grade-card">
+
                 <span>📖</span>
-                <strong>الفصل الدراسي الأول</strong>
+
+                <strong>
+                    الفصل الدراسي الأول
+                </strong>
+
             </a>
 
-            <!-- الفصل الدراسي الثاني -->
-            <a href="semester2.html" class="grade-card">
+
+            <a
+                href="semester2.html"
+                class="grade-card">
+
                 <span>📚</span>
-                <strong>الفصل الدراسي الثاني</strong>
+
+                <strong>
+                    الفصل الدراسي الثاني
+                </strong>
+
             </a>
 
         </div>
 
 
-        <!-- العودة إلى الصفوف -->
-        <a href="index.html" class="grade-card">
+        <a
+            href="index.html"
+            class="grade-card">
+
             <span>⬅️</span>
-            <strong>العودة إلى الصفوف</strong>
+
+            <strong>
+                العودة إلى الصفوف
+            </strong>
+
         </a>
 
     </main>
 
+
+    <footer>
+
+        <p>
+            <strong>نقطة س</strong>
+            | مع أ. رتاج السعيدية ✨
+        </p>
+
+        <p>
+            نتعلم الرياضيات بطريقة أبسط 💗
+        </p>
+
+    </footer>
+
+
+    <!-- Supabase -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://nqtuiuglxabkyjlkmnhl.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
+
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        // تحميل بيانات الطالب
+
+        async function loadUser() {
+
+            const {
+                data: { user }
+            } =
+                await supabaseClient.auth.getUser();
+
+
+            if (!user) {
+
+                window.location.href =
+                    "index.html";
+
+                return;
+            }
+
+
+            // عرض البريد الإلكتروني
+
+            document.getElementById(
+                "userEmail"
+            ).textContent =
+                user.email;
+
+
+            // جلب اسم الطالب من profiles
+
+            const {
+                data: profile
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("full_name, grade")
+                    .eq("id", user.id)
+                    .single();
+
+
+            if (
+                profile &&
+                profile.full_name
+            ) {
+
+                document.getElementById(
+                    "userName"
+                ).textContent =
+                    profile.full_name;
+
+
+                document.getElementById(
+                    "userAvatar"
+                ).textContent =
+                    profile.full_name.charAt(0);
+
+            }
+
+        }
+
+
+        // فتح وإغلاق القائمة
+
+        function toggleUserMenu() {
+
+            const menu =
+                document.getElementById(
+                    "userDropdown"
+                );
+
+            menu.classList.toggle("show");
+
+        }
+
+
+        // تسجيل الخروج
+
+        async function logout() {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "index.html";
+
+        }
+
+
+        // تشغيل تحميل بيانات الطالب
+
+        loadUser();
+
+    </script>
+
 </body>
+
 </html>
-<footer>
-
-    <p>
-        <strong>نقطة س</strong>
-        | مع أ. رتاج السعيدية ✨
-    </p>
-
-    <p>
-        نتعلم الرياضيات بطريقة أبسط 💗
-    </p>
-
-</footer>
