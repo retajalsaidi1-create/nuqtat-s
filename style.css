@@ -574,3 +574,88 @@ footer strong {
     }
 
 }
+/* ================================
+   User Menu - دائرة الطالب
+================================ */
+
+.user-menu {
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    z-index: 1000;
+}
+
+.user-button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    font-size: 22px;
+}
+
+.user-button:hover {
+    transform: scale(1.05);
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 55px;
+    width: 230px;
+    background: white;
+    border-radius: 15px;
+    padding: 18px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.user-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #f3dce5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-dropdown strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.user-dropdown span {
+    display: block;
+    font-size: 13px;
+    color: #777;
+    word-break: break-word;
+}
+
+.user-dropdown hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 15px 0;
+}
+
+.user-dropdown button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+}
+
+.user-dropdown button:hover {
+    color: #b85c7a;
+}
