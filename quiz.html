@@ -229,13 +229,21 @@
 </div>
 
 <script>
+
     const SUPABASE_URL = "https://nqtuiuglxabkyjlkmnhl.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
+
+    const SUPABASE_KEY =
+        "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
 
     const supabaseClient =
-        window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
-    const quizId = "unit2_lesson1";
+    /* رقم الاختبار الموجود في جدول quizzes */
+    const quizId = 1;
+
     const totalQuestions = 3;
 
     let currentQuestion = 0;
@@ -246,12 +254,17 @@
         q3: {}
     };
 
+
     const questions = [
 
         {
             id: "q1",
+
             type: "multi",
-            question: "حوّطي على جميع البيانات العددية المنفصلة من البيانات التالية:",
+
+            question:
+                "حوّطي على جميع البيانات العددية المنفصلة من البيانات التالية:",
+
             options: [
                 "عدد طلاب الصف",
                 "الوزن",
@@ -262,6 +275,7 @@
                 "عدد الإخوة والأخوات",
                 "عدد غرف المنزل"
             ],
+
             correct: [
                 "عدد طلاب الصف",
                 "عدد السيارات",
@@ -270,10 +284,15 @@
             ]
         },
 
+
         {
             id: "q2",
+
             type: "multi",
-            question: "حوّطي على جميع البيانات الإحصائية المتصلة مما يلي:",
+
+            question:
+                "حوّطي على جميع البيانات الإحصائية المتصلة مما يلي:",
+
             options: [
                 "عدد السيارات الحمراء في مواقف المدرسة",
                 "أطوال الطلاب",
@@ -282,6 +301,7 @@
                 "عدد الموظفين في مؤسسة حكومية",
                 "عدد الإخوة والأخوات"
             ],
+
             correct: [
                 "أطوال الطلاب",
                 "متوسط الأعمار",
@@ -289,16 +309,22 @@
             ]
         },
 
+
         {
             id: "q3",
+
             type: "table",
-            question: "صنّفي البيانات الآتية في الجدول المقابل:",
+
+            question:
+                "صنّفي البيانات الآتية في الجدول المقابل:",
+
             options: [
                 "عدد السيارات",
                 "درجة الحرارة",
                 "المسافة المقطوعة",
                 "عدد الأهداف"
             ],
+
             correct: {
                 "عدد السيارات": "منفصلة",
                 "درجة الحرارة": "متصلة",
@@ -317,308 +343,465 @@
             error
         } = await supabaseClient.auth.getUser();
 
-        if (error) {
-            console.error("GET USER ERROR:", error);
 
-            alert("حدث خطأ في معرفة المستخدم: " + error.message);
+        if (error) {
+
+            console.error(
+                "GET USER ERROR:",
+                error
+            );
+
+            alert(
+                "حدث خطأ في معرفة المستخدم: " +
+                error.message
+            );
 
             return null;
         }
+
 
         if (!user) {
+
             window.location.href = "index.html";
+
             return null;
         }
+
 
         return user;
     }
 
 
+
     function renderQuestion() {
 
-        const area = document.getElementById("quizArea");
-        const q = questions[currentQuestion];
+        const area =
+            document.getElementById("quizArea");
+
+        const q =
+            questions[currentQuestion];
+
 
         let html = `
+
             <div class="progress">
-                السؤال ${currentQuestion + 1} من ${totalQuestions}
+                السؤال ${currentQuestion + 1}
+                من ${totalQuestions}
             </div>
 
             <div class="question">
                 ${q.question}
             </div>
+
         `;
 
 
         if (q.id === "q1") {
 
             html += `
+
                 <div class="instruction">
                     يمكنك اختيار أكثر من إجابة.
                 </div>
 
                 <div class="options">
+
             `;
+
 
             q.options.forEach(option => {
 
                 const checked =
-                    answers.q1.includes(option) ? "checked" : "";
+                    answers.q1.includes(option)
+                        ? "checked"
+                        : "";
+
 
                 html += `
+
                     <label class="option">
+
                         <input
                             type="checkbox"
                             value="${option}"
                             ${checked}
                         >
+
                         ${option}
+
                     </label>
+
                 `;
             });
 
+
             html += `</div>`;
         }
+
 
 
         if (q.id === "q2") {
 
             html += `
+
                 <div class="instruction">
                     يمكنك اختيار أكثر من إجابة.
                 </div>
 
                 <div class="options">
+
             `;
+
 
             q.options.forEach(option => {
 
                 const checked =
-                    answers.q2.includes(option) ? "checked" : "";
+                    answers.q2.includes(option)
+                        ? "checked"
+                        : "";
+
 
                 html += `
+
                     <label class="option">
+
                         <input
                             type="checkbox"
                             value="${option}"
                             ${checked}
                         >
+
                         ${option}
+
                     </label>
+
                 `;
             });
+
 
             html += `</div>`;
         }
 
 
+
         if (q.id === "q3") {
 
             html += `
+
                 <div class="instruction">
                     صنّفي كل بيان في العمود المناسب.
                 </div>
 
                 <div class="table-wrap">
+
                     <table>
+
                         <thead>
+
                             <tr>
-                                <th>البيان</th>
-                                <th>نوع البيانات</th>
+
+                                <th>
+                                    البيان
+                                </th>
+
+                                <th>
+                                    نوع البيانات
+                                </th>
+
                             </tr>
+
                         </thead>
 
                         <tbody>
+
             `;
+
 
             q.options.forEach(option => {
 
                 const selected =
                     answers.q3[option] || "";
 
+
                 html += `
+
                     <tr>
-                        <td>${option}</td>
 
                         <td>
-                            <select data-item="${option}">
-                                <option value="">اختاري</option>
+                            ${option}
+                        </td>
 
-                                <option value="منفصلة"
-                                    ${selected === "منفصلة" ? "selected" : ""}>
+                        <td>
+
+                            <select
+                                data-item="${option}"
+                            >
+
+                                <option value="">
+                                    اختاري
+                                </option>
+
+                                <option
+                                    value="منفصلة"
+                                    ${selected === "منفصلة"
+                                        ? "selected"
+                                        : ""}
+                                >
                                     بيانات منفصلة
                                 </option>
 
-                                <option value="متصلة"
-                                    ${selected === "متصلة" ? "selected" : ""}>
+                                <option
+                                    value="متصلة"
+                                    ${selected === "متصلة"
+                                        ? "selected"
+                                        : ""}
+                                >
                                     بيانات متصلة
                                 </option>
+
                             </select>
+
                         </td>
+
                     </tr>
+
                 `;
             });
 
+
             html += `
+
                         </tbody>
+
                     </table>
+
                 </div>
+
             `;
         }
 
 
+
         html += `
+
             <div class="buttons">
 
                 <button
                     class="back-btn"
                     onclick="previousQuestion()"
-                    ${currentQuestion === 0 ? "disabled" : ""}>
+                    ${currentQuestion === 0
+                        ? "disabled"
+                        : ""}
+                >
                     السابق
                 </button>
+
         `;
 
 
-        if (currentQuestion < totalQuestions - 1) {
+
+        if (
+            currentQuestion <
+            totalQuestions - 1
+        ) {
 
             html += `
+
                 <button
                     class="next-btn"
-                    onclick="nextQuestion()">
+                    onclick="nextQuestion()"
+                >
                     التالي
                 </button>
+
             `;
 
         } else {
 
             html += `
+
                 <button
                     class="finish-btn"
-                    onclick="finishQuiz()">
+                    onclick="finishQuiz()"
+                >
                     إنهاء الاختبار
                 </button>
+
             `;
         }
 
 
+
         html += `</div>`;
+
 
         area.innerHTML = html;
     }
 
 
+
     function saveCurrentAnswer() {
 
-        const q = questions[currentQuestion];
+        const q =
+            questions[currentQuestion];
+
 
         if (q.id === "q1") {
 
             answers.q1 = Array.from(
+
                 document.querySelectorAll(
                     '#quizArea input[type="checkbox"]:checked'
                 )
-            ).map(input => input.value);
+
+            ).map(
+                input => input.value
+            );
         }
+
 
 
         if (q.id === "q2") {
 
             answers.q2 = Array.from(
+
                 document.querySelectorAll(
                     '#quizArea input[type="checkbox"]:checked'
                 )
-            ).map(input => input.value);
+
+            ).map(
+                input => input.value
+            );
         }
+
 
 
         if (q.id === "q3") {
 
             answers.q3 = {};
 
-            document.querySelectorAll("select[data-item]")
+
+            document
+                .querySelectorAll(
+                    "select[data-item]"
+                )
                 .forEach(select => {
 
-                    answers.q3[select.dataset.item] =
-                        select.value;
+                    answers.q3[
+                        select.dataset.item
+                    ] = select.value;
+
                 });
         }
     }
+
 
 
     function nextQuestion() {
 
         saveCurrentAnswer();
 
-        if (currentQuestion < totalQuestions - 1) {
+
+        if (
+            currentQuestion <
+            totalQuestions - 1
+        ) {
+
             currentQuestion++;
+
             renderQuestion();
         }
     }
+
 
 
     function previousQuestion() {
 
         saveCurrentAnswer();
 
+
         if (currentQuestion > 0) {
+
             currentQuestion--;
+
             renderQuestion();
         }
     }
+
 
 
     function calculateScore() {
 
         let score = 0;
 
+
         const q1Correct =
             questions[0].correct;
+
 
         const q1Answer =
             [...answers.q1].sort();
 
+
         if (
             JSON.stringify(q1Answer) ===
-            JSON.stringify([...q1Correct].sort())
+            JSON.stringify(
+                [...q1Correct].sort()
+            )
         ) {
+
             score++;
         }
+
 
 
         const q2Correct =
             questions[1].correct;
 
+
         const q2Answer =
             [...answers.q2].sort();
 
+
         if (
             JSON.stringify(q2Answer) ===
-            JSON.stringify([...q2Correct].sort())
+            JSON.stringify(
+                [...q2Correct].sort()
+            )
         ) {
+
             score++;
         }
+
 
 
         const q3Correct =
             questions[2].correct;
 
+
         let q3CorrectCount = 0;
 
-        Object.keys(q3Correct).forEach(item => {
 
-            if (
-                answers.q3[item] ===
-                q3Correct[item]
-            ) {
-                q3CorrectCount++;
-            }
-        });
+        Object.keys(q3Correct)
+            .forEach(item => {
+
+                if (
+                    answers.q3[item] ===
+                    q3Correct[item]
+                ) {
+
+                    q3CorrectCount++;
+                }
+
+            });
+
 
 
         if (
             q3CorrectCount ===
             Object.keys(q3Correct).length
         ) {
+
             score++;
         }
 
@@ -627,130 +810,239 @@
     }
 
 
+
     async function finishQuiz() {
 
         saveCurrentAnswer();
 
-        const score = calculateScore();
-        const total = totalQuestions;
+
+        const score =
+            calculateScore();
+
+
+        const total =
+            totalQuestions;
+
 
         const percentage =
-            Math.round((score / total) * 100);
+            Math.round(
+                (score / total) * 100
+            );
 
 
-        const user = await getCurrentUser();
+        const user =
+            await getCurrentUser();
+
 
         if (!user) return;
 
 
-        // محاولة قراءة النتائج السابقة
+
+        /*
+         * قراءة المحاولات السابقة
+         */
+
         const {
             data: previousAttempts,
             error: previousError
         } = await supabaseClient
+
             .from("quiz_results")
+
             .select("id")
-            .eq("user_id", user.id)
-            .eq("quiz_id", quizId);
+
+            .eq(
+                "user_id",
+                user.id
+            )
+
+            .eq(
+                "quiz_id",
+                quizId
+            );
+
 
 
         if (previousError) {
 
-            console.error("SELECT ERROR:", previousError);
+            console.error(
+                "SELECT ERROR:",
+                previousError
+            );
 
-            document.getElementById("quizArea").innerHTML = `
+
+            document.getElementById(
+                "quizArea"
+            ).innerHTML = `
+
                 <div class="error-box">
 
                     <div class="error-title">
+
                         ظهر خطأ أثناء قراءة نتائج الاختبار
+
                     </div>
 
+
                     <div class="error-text">
+
                         ${previousError.message}
+
                         <br><br>
-                        Code: ${previousError.code || "غير موجود"}
+
+                        Code:
+                        ${previousError.code || "غير موجود"}
+
                         <br>
-                        Details: ${previousError.details || "غير موجود"}
+
+                        Details:
+                        ${previousError.details || "غير موجود"}
+
                         <br>
-                        Hint: ${previousError.hint || "غير موجود"}
+
+                        Hint:
+                        ${previousError.hint || "غير موجود"}
+
                     </div>
 
                 </div>
+
             `;
 
             return;
         }
+
 
 
         const attemptNumber =
             (previousAttempts?.length || 0) + 1;
 
 
-        // محاولة حفظ النتيجة
-        const { data: insertedData, error } =
-            await supabaseClient
-                .from("quiz_results")
-                .insert({
-                    user_id: user.id,
-                    quiz_id: quizId,
-                    score: score,
-                    total: total,
-                    completed_at: new Date().toISOString()
-                })
-                .select();
+
+        /*
+         * حفظ النتيجة
+         */
+
+        const {
+            data: insertedData,
+            error
+        } = await supabaseClient
+
+            .from("quiz_results")
+
+            .insert({
+
+                user_id: user.id,
+
+                quiz_id: quizId,
+
+                score: score,
+
+                total: total,
+
+                completed_at:
+                    new Date().toISOString()
+
+            })
+
+            .select();
+
 
 
         if (error) {
 
-            console.error("INSERT ERROR:", error);
+            console.error(
+                "INSERT ERROR:",
+                error
+            );
 
-            document.getElementById("quizArea").innerHTML = `
+
+            document.getElementById(
+                "quizArea"
+            ).innerHTML = `
+
                 <div class="error-box">
 
                     <div class="error-title">
+
                         ظهر خطأ أثناء حفظ نتيجة الاختبار
+
                     </div>
 
+
                     <div class="error-text">
+
                         ${error.message}
+
                         <br><br>
-                        Code: ${error.code || "غير موجود"}
+
+                        Code:
+                        ${error.code || "غير موجود"}
+
                         <br>
-                        Details: ${error.details || "غير موجود"}
+
+                        Details:
+                        ${error.details || "غير موجود"}
+
                         <br>
-                        Hint: ${error.hint || "غير موجود"}
+
+                        Hint:
+                        ${error.hint || "غير موجود"}
+
                     </div>
 
                 </div>
+
             `;
 
             return;
         }
 
 
-        console.log("RESULT SAVED:", insertedData);
-        console.log("ATTEMPT NUMBER:", attemptNumber);
+
+        console.log(
+            "RESULT SAVED:",
+            insertedData
+        );
+
+
+        console.log(
+            "ATTEMPT NUMBER:",
+            attemptNumber
+        );
+
 
 
         let message = "";
 
 
+
         if (percentage === 100) {
 
-            message = "ممتاز جدًا! 🎉 أحسنتِ!";
+            message =
+                "ممتاز جدًا! 🎉 أحسنتِ!";
 
-        } else if (percentage >= 66) {
+        }
 
-            message = "أحسنتِ! لديكِ فهم جيد للدرس 🌷";
+        else if (percentage >= 66) {
 
-        } else {
+            message =
+                "أحسنتِ! لديكِ فهم جيد للدرس 🌷";
 
-            message = "بداية جيدة! راجعي الدرس وحاولي مرة أخرى 💗";
+        }
+
+        else {
+
+            message =
+                "بداية جيدة! راجعي الدرس وحاولي مرة أخرى 💗";
 
         }
 
 
-        document.getElementById("quizArea").innerHTML = `
+
+        document.getElementById(
+            "quizArea"
+        ).innerHTML = `
 
             <div class="result">
 
@@ -758,45 +1050,63 @@
                     انتهى الاختبار 🎉
                 </div>
 
+
                 <div class="score">
                     ${score} / ${total}
                 </div>
+
 
                 <div class="message">
                     ${message}
                 </div>
 
+
                 <p>
+
                     النسبة:
-                    <strong>${percentage}%</strong>
+
+                    <strong>
+                        ${percentage}%
+                    </strong>
+
                 </p>
 
-                <div class="buttons"
-                     style="justify-content:center;">
+
+                <div
+                    class="buttons"
+                    style="justify-content:center;"
+                >
 
                     <button
                         class="back-btn"
-                        onclick="location.reload()">
+                        onclick="location.reload()"
+                    >
                         إعادة الاختبار
                     </button>
 
+
                     <a
                         href="lesson.html?lesson=6"
-                        class="home-btn">
+                        class="home-btn"
+                    >
                         العودة إلى الدرس
                     </a>
 
                 </div>
 
             </div>
+
         `;
     }
+
 
 
     getCurrentUser().then(user => {
 
         if (user) {
+
             renderQuestion();
+
         }
 
     });
