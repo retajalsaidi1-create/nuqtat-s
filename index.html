@@ -95,14 +95,13 @@ class="login-button"
 </div>
 
 
-<button
-type="button"
+<a
+href="signup.html"
 class="create-account"
-id="signupButton"
+style="display:block; text-decoration:none; box-sizing:border-box;"
 >
 📝 إنشاء حساب جديد
-</button>
-
+</a>
 
 <p id="message" class="message"></p>
 
@@ -154,13 +153,8 @@ SUPABASE_KEY
 
 // زر إنشاء حساب جديد
 
-document
-.getElementById("signupButton")
-.addEventListener("click", function () {
-
-window.location.href = "signup.html";
-
-});
+const SUPABASE_URL =
+"https://nqtuiuglxabkyjlkmnhl.supabase.co";
 
 
 // تسجيل الدخول
@@ -242,4 +236,4 @@ window.location.href = "grades.html";
 </body>
 
 </html>
-```
+
