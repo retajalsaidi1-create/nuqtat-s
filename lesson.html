@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -8,6 +9,9 @@
     <title>الدرس - نقطة س</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -98,10 +102,37 @@
 
     <script>
 
-        const params = new URLSearchParams(window.location.search);
+        /* ==============================
+           Supabase
+        ============================== */
 
-        const lessonNumber = params.get("lesson");
+        const SUPABASE_URL =
+            "https://nqtuiuglxabkyjlkmnhl.supabase.co";
 
+        const SUPABASE_KEY =
+            "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
+
+        const supabaseClient =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        /* ==============================
+           معرفة رقم الدرس
+        ============================== */
+
+        const params =
+            new URLSearchParams(window.location.search);
+
+        const lessonNumber =
+            params.get("lesson");
+
+
+        /* ==============================
+           بيانات الدروس
+        ============================== */
 
         const lessons = {
 
@@ -222,6 +253,10 @@
         };
 
 
+        /* ==============================
+           عرض بيانات الدرس
+        ============================== */
+
         if (lessons[lessonNumber]) {
 
             document.getElementById("lessonTitle").textContent =
@@ -235,8 +270,106 @@
 
         }
 
+
+        /* ==============================
+           تسجيل مشاهدة الدرس
+        ============================== */
+
+        async function recordLessonView() {
+
+            try {
+
+                const { data, error } =
+                    await supabaseClient.auth.getUser();
+
+
+                if (error) {
+
+                    console.error(
+                        "خطأ في معرفة المستخدم:",
+                        error
+                    );
+
+                    return;
+                }
+
+
+                const user = data.user;
+
+
+                /* إذا لم يكن الطالب مسجل الدخول */
+
+                if (!user) {
+
+                    window.location.href = "index.html";
+
+                    return;
+                }
+
+
+                /* إذا كان رقم الدرس غير صحيح */
+
+                if (!lessons[lessonNumber]) {
+
+                    console.error(
+                        "رقم الدرس غير صحيح"
+                    );
+
+                    return;
+                }
+
+
+                /* تسجيل مشاهدة الدرس */
+
+                const { error: activityError } =
+                    await supabaseClient
+                        .from("activity")
+                        .insert({
+
+                            user_id: user.id,
+
+                            page:
+                                `lesson.html?lesson=${lessonNumber}`,
+
+                            action: "view"
+
+                        });
+
+
+                if (activityError) {
+
+                    console.error(
+                        "خطأ في تسجيل مشاهدة الدرس:",
+                        activityError
+                    );
+
+                } else {
+
+                    console.log(
+                        "تم تسجيل مشاهدة الدرس بنجاح ✅"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "حدث خطأ:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* تشغيل تسجيل المشاهدة */
+
+        recordLessonView();
+
     </script>
 
 </body>
 
 </html>
+```
