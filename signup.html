@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>إنشاء حساب | نقطة س</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>نقطة س</h1>
+
+<p>منصتك لتعلّم الرياضيات</p>
+
+<span class="teacher-name">
+    أ. رتاج السعيدية
+</span>
+
+</header>
+
+<main class="login-container">
+
+<div class="login-card">
+
+    <div class="login-icon">
+        📝
+    </div>
+
+    <h2>إنشاء حساب جديد 💗</h2>
+
+    <p class="welcome-text">
+        أنشئ حسابك للبدء في رحلة تعلّم الرياضيات.
+    </p>
+
+
+    <form onsubmit="createAccount(event)">
+
+        <label for="fullName">
+            الاسم
+        </label>
+
+        <input
+            type="text"
+            id="fullName"
+            placeholder="اكتب اسمك الكامل"
+            required
+        >
+
+
+        <label for="grade">
+            الصف
+        </label>
+
+        <select id="grade" required>
+
+            <option value="">
+                اختر الصف
+            </option>
+
+            <option value="الصف السابع">
+                الصف السابع
+            </option>
+
+            <option value="الصف الثامن">
+                الصف الثامن
+            </option>
+
+            <option value="الصف التاسع">
+                الصف التاسع
+            </option>
+
+            <option value="الصف العاشر">
+                الصف العاشر
+            </option>
+
+            <option value="الصف الحادي عشر">
+                الصف الحادي عشر
+            </option>
+
+            <option value="الصف الثاني عشر">
+                الصف الثاني عشر
+            </option>
+
+        </select>
+
+
+        <label for="email">
+            البريد الإلكتروني
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="أدخل بريدك الإلكتروني"
+            required
+        >
+
+
+        <label for="password">
+            كلمة المرور
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="6 أحرف على الأقل"
+            minlength="6"
+            required
+        >
+
+
+        <label for="confirmPassword">
+            تأكيد كلمة المرور
+        </label>
+
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="أعد كتابة كلمة المرور"
+            minlength="6"
+            required
+        >
+
+
+        <button
+            type="submit"
+            class="login-button"
+        >
+            📝 إنشاء الحساب
+        </button>
+
+    </form>
+
+
+    <div class="divider">
+        <span>لديك حساب بالفعل؟</span>
+    </div>
+
+
+    <button
+        type="button"
+        class="create-account"
+        onclick="goToLogin()"
+    >
+        🔐 تسجيل الدخول
+    </button>
+
+
+    <p id="message" class="message"></p>
+
+</div>
+
+
+<div class="login-note">
+
+    <span>📚</span>
+
+    <p>
+        تعلّم الرياضيات بطريقة أبسط
+        <br>
+        مع أ. رتاج السعيدية ✨
+    </p>
+
+</div>
+
+</main>
+
+<footer>
+
+<p>
+    © نقطة س | أ. رتاج السعيدية ✨
+</p>
+
+</footer>
+
+<script> const SUPABASE_URL = "https://nqtuiuglxabkyjlkmnhl.supabase.co"; const SUPABASE_KEY = "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY ); // إنشاء الحساب async function createAccount(event) { event.preventDefault(); const fullName = document.getElementById("fullName").value.trim(); const grade = document.getElementById("grade").value; const email = document.getElementById("email").value.trim(); const password = document.getElementById("password").value; const confirmPassword = document.getElementById("confirmPassword").value; const message = document.getElementById("message"); // التأكد من كلمة المرور if (password !== confirmPassword) { message.textContent = "❌ كلمتا المرور غير متطابقتين."; return; } if (password.length < 6) { message.textContent = "❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل."; return; } message.textContent = "جاري إنشاء الحساب..."; // إنشاء الحساب في Supabase const { data, error } = await supabaseClient.auth.signUp({ email: email, password: password }); if (error) { message.textContent = "❌ حدث خطأ: " + error.message; console.error(error); return; } // حفظ اسم الطالب وصفه if (data.user) { const { error: profileError } = await supabaseClient .from("profiles") .insert({ id: data.user.id, full_name: fullName, grade: grade }); if (profileError) { console.error(profileError); message.textContent = "⚠️ تم إنشاء الحساب، لكن حدثت مشكلة في حفظ بيانات الطالب."; return; } } message.innerHTML = "✅ تم إنشاء الحساب بنجاح! 💗" + "<br><br>" + "📩 تم إرسال رسالة تأكيد إلى بريدك الإلكتروني." + "<br>" + "افتح بريدك وأكد الحساب، ثم سجّل الدخول."; // تفريغ النموذج document.querySelector("form").reset(); } // العودة لتسجيل الدخول function goToLogin() { window.location.href = "index.html"; } </script>
+
+</body>
+
+</html>
