@@ -3,6 +3,7 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,13 +13,17 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
     <header>
+
         <h1 id="lessonTitle">الدرس</h1>
+
         <p id="unitTitle">نقطة س التعليمية</p>
+
     </header>
 
 
@@ -508,8 +513,8 @@
 
             button.innerHTML =
                 `
-                <span>✅</span>
-                <strong>تم إكمال الدرس</strong>
+                    <span>✅</span>
+                    <strong>تم إكمال الدرس</strong>
                 `;
 
 
@@ -539,8 +544,8 @@
 
             button.innerHTML =
                 `
-                <span>⏳</span>
-                <strong>جاري التسجيل...</strong>
+                    <span>⏳</span>
+                    <strong>جاري التسجيل...</strong>
                 `;
 
 
@@ -580,8 +585,8 @@
 
                 button.innerHTML =
                     `
-                    <span>❌</span>
-                    <strong>حاولي مرة أخرى</strong>
+                        <span>❌</span>
+                        <strong>حاولي مرة أخرى</strong>
                     `;
 
                 return;
@@ -619,8 +624,8 @@
 
                 button.innerHTML =
                     `
-                    <span>❌</span>
-                    <strong>حدث خطأ، حاولي مرة أخرى</strong>
+                        <span>❌</span>
+                        <strong>حدث خطأ، حاولي مرة أخرى</strong>
                     `;
 
                 return;
@@ -730,6 +735,8 @@
                             event.preventDefault();
 
 
+                            /* تسجيل فتح الملخص */
+
                             await recordActivity(
                                 user,
                                 "summary"
@@ -737,13 +744,17 @@
 
 
                             /*
-                             * حاليًا الرابط # لأن
-                             * ملف PDF لم تتم إضافته بعد.
+                             * فتح ملخص الدرس ٢-١
                              */
 
-                            console.log(
-                                "تم تسجيل فتح الملخص 📄"
-                            );
+                            if (lessonNumber === "6") {
+
+                                window.open(
+                                    "١-٢%20جمع%20البيانات%20وتصنيفها.pdf",
+                                    "_blank"
+                                );
+
+                            }
 
                         }
                     );
@@ -769,8 +780,7 @@
 
 
                             /*
-                             * حاليًا الرابط # لأن
-                             * الاختبار لم تتم إضافته بعد.
+                             * حاليًا الاختبار لم تتم إضافته بعد.
                              */
 
                             console.log(
@@ -846,4 +856,4 @@
 </body>
 
 </html>
-```
+
