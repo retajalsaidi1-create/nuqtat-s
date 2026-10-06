@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -21,7 +21,13 @@
         <p id="unitTitle">نقطة س التعليمية</p>
     </header>
 
+
     <main class="container">
+
+
+        <!-- ==============================
+             شرح الدرس
+        ============================== -->
 
         <div class="card">
 
@@ -31,7 +37,8 @@
                 شاهد فيديو شرح الدرس هنا.
             </p>
 
-            <div id="videoBox">
+            <div id="videoBox"
+                 style="cursor: pointer;">
 
                 <p>
                     سيتم إضافة فيديو الشرح هنا.
@@ -42,6 +49,10 @@
         </div>
 
 
+        <!-- ==============================
+             ملخص الدرس
+        ============================== -->
+
         <div class="card">
 
             <h2>📄 ملخص الدرس</h2>
@@ -50,13 +61,25 @@
                 يمكنك فتح ملخص الدرس بصيغة PDF هنا.
             </p>
 
-            <a href="#" class="grade-card">
+            <a
+                href="#"
+                id="summaryButton"
+                class="grade-card">
+
                 <span>📄</span>
-                <strong>فتح ملخص الدرس</strong>
+
+                <strong>
+                    فتح ملخص الدرس
+                </strong>
+
             </a>
 
         </div>
 
+
+        <!-- ==============================
+             اختبار الدرس
+        ============================== -->
 
         <div class="card">
 
@@ -66,21 +89,81 @@
                 اختبر فهمك للدرس من خلال الأسئلة.
             </p>
 
-            <a href="#" class="grade-card">
+            <a
+                href="#"
+                id="quizButton"
+                class="grade-card">
+
                 <span>📝</span>
-                <strong>بدء الاختبار</strong>
+
+                <strong>
+                    بدء الاختبار
+                </strong>
+
             </a>
 
         </div>
 
 
-        <a id="backButton" href="semester1.html" class="grade-card">
+        <!-- ==============================
+             إكمال الدرس
+        ============================== -->
+
+        <div class="card">
+
+            <h2>🎯 إكمال الدرس</h2>
+
+            <p>
+                بعد الانتهاء من مشاهدة الدرس ومراجعة الملخص
+                والاختبار، اضغط على الزر لتسجيل إكمالك للدرس.
+            </p>
+
+            <button
+                id="completeButton"
+                type="button"
+                class="grade-card"
+                style="
+                    border: none;
+                    width: 100%;
+                    cursor: pointer;
+                    font-family: inherit;
+                ">
+
+                <span>✅</span>
+
+                <strong>
+                    تم إكمال الدرس
+                </strong>
+
+            </button>
+
+        </div>
+
+
+        <!-- ==============================
+             العودة إلى الوحدة
+        ============================== -->
+
+        <a
+            id="backButton"
+            href="semester1.html"
+            class="grade-card">
+
             <span>⬅️</span>
-            <strong>العودة إلى الوحدة</strong>
+
+            <strong>
+                العودة إلى الوحدة
+            </strong>
+
         </a>
+
 
     </main>
 
+
+    <!-- ==============================
+         Footer
+    ============================== -->
 
     <footer>
 
@@ -102,9 +185,9 @@
 
     <script>
 
-        /* ==============================
+        /* ==========================================
            Supabase
-        ============================== */
+        ========================================== */
 
         const SUPABASE_URL =
             "https://nqtuiuglxabkyjlkmnhl.supabase.co";
@@ -119,20 +202,22 @@
             );
 
 
-        /* ==============================
-           معرفة رقم الدرس
-        ============================== */
+        /* ==========================================
+           معرفة رقم الدرس من الرابط
+        ========================================== */
 
         const params =
-            new URLSearchParams(window.location.search);
+            new URLSearchParams(
+                window.location.search
+            );
 
         const lessonNumber =
             params.get("lesson");
 
 
-        /* ==============================
-           بيانات الدروس
-        ============================== */
+        /* ==========================================
+           بيانات جميع الدروس
+        ========================================== */
 
         const lessons = {
 
@@ -253,34 +338,335 @@
         };
 
 
-        /* ==============================
-           عرض بيانات الدرس
-        ============================== */
+        /* ==========================================
+           التأكد من وجود الدرس
+        ========================================== */
 
-        if (lessons[lessonNumber]) {
+        if (!lessons[lessonNumber]) {
 
-            document.getElementById("lessonTitle").textContent =
+            console.error(
+                "رقم الدرس غير صحيح"
+            );
+
+        } else {
+
+            document
+                .getElementById("lessonTitle")
+                .textContent =
                 lessons[lessonNumber].title;
 
-            document.getElementById("unitTitle").textContent =
+
+            document
+                .getElementById("unitTitle")
+                .textContent =
                 lessons[lessonNumber].unit;
 
-            document.getElementById("backButton").href =
+
+            document
+                .getElementById("backButton")
+                .href =
                 lessons[lessonNumber].back;
 
         }
 
 
-        /* ==============================
-           تسجيل مشاهدة الدرس
-        ============================== */
+        /* ==========================================
+           اسم صفحة الدرس في activity
+        ========================================== */
 
-        async function recordLessonView() {
+        const lessonPage =
+            `lesson.html?lesson=${lessonNumber}`;
+
+
+        /* ==========================================
+           تسجيل أي نشاط
+        ========================================== */
+
+        async function recordActivity(user, action) {
 
             try {
 
+                const { error } =
+                    await supabaseClient
+                        .from("activity")
+                        .insert({
+
+                            user_id: user.id,
+
+                            page: lessonPage,
+
+                            action: action
+
+                        });
+
+
+                if (error) {
+
+                    console.error(
+                        "خطأ في تسجيل النشاط:",
+                        error
+                    );
+
+                    return false;
+
+                }
+
+
+                console.log(
+                    "تم تسجيل النشاط:",
+                    action
+                );
+
+                return true;
+
+
+            } catch (error) {
+
+                console.error(
+                    "حدث خطأ:",
+                    error
+                );
+
+                return false;
+
+            }
+
+        }
+
+
+        /* ==========================================
+           تسجيل مشاهدة الدرس
+        ========================================== */
+
+        async function recordLessonView(user) {
+
+            await recordActivity(
+                user,
+                "view"
+            );
+
+        }
+
+
+        /* ==========================================
+           التحقق هل الطالب أكمل الدرس سابقًا
+        ========================================== */
+
+        async function checkLessonCompletion(user) {
+
+            const { data, error } =
+                await supabaseClient
+                    .from("activity")
+                    .select("id")
+                    .eq(
+                        "user_id",
+                        user.id
+                    )
+                    .eq(
+                        "page",
+                        lessonPage
+                    )
+                    .eq(
+                        "action",
+                        "complete"
+                    )
+                    .limit(1);
+
+
+            if (error) {
+
+                console.error(
+                    "خطأ في التحقق من الإكمال:",
+                    error
+                );
+
+                return;
+
+            }
+
+
+            if (data && data.length > 0) {
+
+                showCompletedButton();
+
+            }
+
+        }
+
+
+        /* ==========================================
+           شكل زر الإكمال بعد الإكمال
+        ========================================== */
+
+        function showCompletedButton() {
+
+            const button =
+                document.getElementById(
+                    "completeButton"
+                );
+
+
+            button.innerHTML =
+                `
+                <span>✅</span>
+                <strong>تم إكمال الدرس</strong>
+                `;
+
+
+            button.disabled = true;
+
+            button.style.opacity = "0.7";
+
+            button.style.cursor = "default";
+
+        }
+
+
+        /* ==========================================
+           تسجيل إكمال الدرس
+        ========================================== */
+
+        async function completeLesson(user) {
+
+            const button =
+                document.getElementById(
+                    "completeButton"
+                );
+
+
+            button.disabled = true;
+
+
+            button.innerHTML =
+                `
+                <span>⏳</span>
+                <strong>جاري التسجيل...</strong>
+                `;
+
+
+            /*
+             * نتأكد مرة أخرى أن الطالب
+             * لم يكمل الدرس سابقًا
+             */
+
+            const { data: existing, error: checkError } =
+                await supabaseClient
+                    .from("activity")
+                    .select("id")
+                    .eq(
+                        "user_id",
+                        user.id
+                    )
+                    .eq(
+                        "page",
+                        lessonPage
+                    )
+                    .eq(
+                        "action",
+                        "complete"
+                    )
+                    .limit(1);
+
+
+            if (checkError) {
+
+                console.error(
+                    "خطأ في التحقق:",
+                    checkError
+                );
+
+
+                button.disabled = false;
+
+                button.innerHTML =
+                    `
+                    <span>❌</span>
+                    <strong>حاولي مرة أخرى</strong>
+                    `;
+
+                return;
+
+            }
+
+
+            /*
+             * إذا كان مكتملًا بالفعل
+             */
+
+            if (existing && existing.length > 0) {
+
+                showCompletedButton();
+
+                return;
+
+            }
+
+
+            /*
+             * تسجيل الإكمال
+             */
+
+            const success =
+                await recordActivity(
+                    user,
+                    "complete"
+                );
+
+
+            if (!success) {
+
+                button.disabled = false;
+
+                button.innerHTML =
+                    `
+                    <span>❌</span>
+                    <strong>حدث خطأ، حاولي مرة أخرى</strong>
+                    `;
+
+                return;
+
+            }
+
+
+            /* تغيير شكل الزر */
+
+            showCompletedButton();
+
+
+            alert(
+                "تم تسجيل إكمال الدرس بنجاح ✅"
+            );
+
+        }
+
+
+        /* ==========================================
+           تشغيل الصفحة
+        ========================================== */
+
+        async function initializeLesson() {
+
+            try {
+
+                /*
+                 * التأكد من صحة رقم الدرس
+                 */
+
+                if (!lessons[lessonNumber]) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * معرفة المستخدم الحالي
+                 */
+
                 const { data, error } =
-                    await supabaseClient.auth.getUser();
+                    await supabaseClient
+                        .auth
+                        .getUser();
 
 
                 if (error) {
@@ -291,70 +677,156 @@
                     );
 
                     return;
+
                 }
 
 
-                const user = data.user;
+                const user =
+                    data.user;
 
 
-                /* إذا لم يكن الطالب مسجل الدخول */
+                /*
+                 * إذا لم يكن مسجل الدخول
+                 */
 
                 if (!user) {
 
-                    window.location.href = "index.html";
+                    window.location.href =
+                        "index.html";
 
                     return;
-                }
-
-
-                /* إذا كان رقم الدرس غير صحيح */
-
-                if (!lessons[lessonNumber]) {
-
-                    console.error(
-                        "رقم الدرس غير صحيح"
-                    );
-
-                    return;
-                }
-
-
-                /* تسجيل مشاهدة الدرس */
-
-                const { error: activityError } =
-                    await supabaseClient
-                        .from("activity")
-                        .insert({
-
-                            user_id: user.id,
-
-                            page:
-                                `lesson.html?lesson=${lessonNumber}`,
-
-                            action: "view"
-
-                        });
-
-
-                if (activityError) {
-
-                    console.error(
-                        "خطأ في تسجيل مشاهدة الدرس:",
-                        activityError
-                    );
-
-                } else {
-
-                    console.log(
-                        "تم تسجيل مشاهدة الدرس بنجاح ✅"
-                    );
 
                 }
+
+
+                /*
+                 * تسجيل دخول الطالب للدرس
+                 */
+
+                await recordLessonView(
+                    user
+                );
+
+
+                /*
+                 * معرفة هل أكمل الدرس سابقًا
+                 */
+
+                await checkLessonCompletion(
+                    user
+                );
+
+
+                /* ==================================
+                   زر الملخص
+                ================================== */
+
+                document
+                    .getElementById("summaryButton")
+                    .addEventListener(
+                        "click",
+                        async function(event) {
+
+                            event.preventDefault();
+
+
+                            await recordActivity(
+                                user,
+                                "summary"
+                            );
+
+
+                            /*
+                             * حاليًا الرابط # لأن
+                             * ملف PDF لم تتم إضافته بعد.
+                             */
+
+                            console.log(
+                                "تم تسجيل فتح الملخص 📄"
+                            );
+
+                        }
+                    );
+
+
+                /* ==================================
+                   زر الاختبار
+                ================================== */
+
+                document
+                    .getElementById("quizButton")
+                    .addEventListener(
+                        "click",
+                        async function(event) {
+
+                            event.preventDefault();
+
+
+                            await recordActivity(
+                                user,
+                                "quiz"
+                            );
+
+
+                            /*
+                             * حاليًا الرابط # لأن
+                             * الاختبار لم تتم إضافته بعد.
+                             */
+
+                            console.log(
+                                "تم تسجيل بدء الاختبار 📝"
+                            );
+
+                        }
+                    );
+
+
+                /* ==================================
+                   منطقة الفيديو
+                ================================== */
+
+                document
+                    .getElementById("videoBox")
+                    .addEventListener(
+                        "click",
+                        async function() {
+
+                            await recordActivity(
+                                user,
+                                "video"
+                            );
+
+
+                            console.log(
+                                "تم تسجيل مشاهدة/فتح الفيديو 🎥"
+                            );
+
+                        }
+                    );
+
+
+                /* ==================================
+                   زر إكمال الدرس
+                ================================== */
+
+                document
+                    .getElementById("completeButton")
+                    .addEventListener(
+                        "click",
+                        function() {
+
+                            completeLesson(
+                                user
+                            );
+
+                        }
+                    );
+
 
             } catch (error) {
 
                 console.error(
-                    "حدث خطأ:",
+                    "حدث خطأ في الصفحة:",
                     error
                 );
 
@@ -363,9 +835,11 @@
         }
 
 
-        /* تشغيل تسجيل المشاهدة */
+        /* ==========================================
+           بدء تشغيل الصفحة
+        ========================================== */
 
-        recordLessonView();
+        initializeLesson();
 
     </script>
 
