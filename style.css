@@ -659,4 +659,17 @@ footer strong {
 .user-dropdown button:hover {
     color: #b85c7a;
 }
-.grade-select { width: 100%; height: 55px; padding: 0 15px; font-size: 17px; border-radius: 10px; border: 1px solid #ccc; background-color: white; cursor: pointer; }
+.grade-select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px;
+    height: 50px;
+    border: 2px solid #f1dce4;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: inherit;
+    outline: none;
+    background-color: #fffafc;
+    color: #4a3f42;
+    cursor: pointer;
+}
