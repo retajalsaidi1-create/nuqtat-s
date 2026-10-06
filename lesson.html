@@ -549,11 +549,6 @@
                 `;
 
 
-            /*
-             * نتأكد مرة أخرى أن الطالب
-             * لم يكمل الدرس سابقًا
-             */
-
             const { data: existing, error: checkError } =
                 await supabaseClient
                     .from("activity")
@@ -594,10 +589,6 @@
             }
 
 
-            /*
-             * إذا كان مكتملًا بالفعل
-             */
-
             if (existing && existing.length > 0) {
 
                 showCompletedButton();
@@ -606,10 +597,6 @@
 
             }
 
-
-            /*
-             * تسجيل الإكمال
-             */
 
             const success =
                 await recordActivity(
@@ -633,8 +620,6 @@
             }
 
 
-            /* تغيير شكل الزر */
-
             showCompletedButton();
 
 
@@ -653,20 +638,12 @@
 
             try {
 
-                /*
-                 * التأكد من صحة رقم الدرس
-                 */
-
                 if (!lessons[lessonNumber]) {
 
                     return;
 
                 }
 
-
-                /*
-                 * معرفة المستخدم الحالي
-                 */
 
                 const { data, error } =
                     await supabaseClient
@@ -690,10 +667,6 @@
                     data.user;
 
 
-                /*
-                 * إذا لم يكن مسجل الدخول
-                 */
-
                 if (!user) {
 
                     window.location.href =
@@ -704,18 +677,10 @@
                 }
 
 
-                /*
-                 * تسجيل دخول الطالب للدرس
-                 */
-
                 await recordLessonView(
                     user
                 );
 
-
-                /*
-                 * معرفة هل أكمل الدرس سابقًا
-                 */
 
                 await checkLessonCompletion(
                     user
@@ -735,17 +700,11 @@
                             event.preventDefault();
 
 
-                            /* تسجيل فتح الملخص */
-
                             await recordActivity(
                                 user,
                                 "summary"
                             );
 
-
-                            /*
-                             * فتح ملخص الدرس ٢-١
-                             */
 
                             if (lessonNumber === "6") {
 
@@ -773,6 +732,8 @@
                             event.preventDefault();
 
 
+                            /* تسجيل بدء الاختبار */
+
                             await recordActivity(
                                 user,
                                 "quiz"
@@ -780,12 +741,21 @@
 
 
                             /*
-                             * حاليًا الاختبار لم تتم إضافته بعد.
+                             * فتح اختبار الدرس ٢-١
                              */
 
-                            console.log(
-                                "تم تسجيل بدء الاختبار 📝"
-                            );
+                            if (lessonNumber === "6") {
+
+                                window.location.href =
+                                    "quiz.html?lesson=6";
+
+                            } else {
+
+                                console.log(
+                                    "لا يوجد اختبار لهذا الدرس حاليًا."
+                                );
+
+                            }
 
                         }
                     );
