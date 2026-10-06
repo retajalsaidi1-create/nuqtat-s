@@ -1,291 +1,122 @@
-
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 
-<head>
-    <meta name="description" content="نقطة س - منصة تعليم الرياضيات">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head> <meta name="description" content="نقطة س - منصة تعليم الرياضيات"> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>تسجيل الدخول | نقطة س</title>
+<title>تسجيل الدخول | نقطة س</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 </head>
 
 <body>
 
-    <header>
+<header>
 
-        <h1>نقطة س</h1>
+<h1>نقطة س</h1>
 
-        <p>منصتك لتعلّم الرياضيات</p>
+<p>منصتك لتعلّم الرياضيات</p>
 
-        <span class="teacher-name">
-            أ. رتاج السعيدية
-        </span>
+<span class="teacher-name">
+    أ. رتاج السعيدية
+</span>
 
-    </header>
+</header>
 
+<main class="login-container">
 
-    <main class="login-container">
+<div class="login-card">
 
-        <div class="login-card">
+    <div class="login-icon">
+        ✏️
+    </div>
 
-            <div class="login-icon">
-                ✏️
-            </div>
+    <h2>مرحبًا بك في نقطة س 💗</h2>
 
-            <h2>مرحبًا بك في نقطة س 💗</h2>
-
-            <p class="welcome-text">
-                سجّل دخولك للوصول إلى دروسك وملخصاتك واختباراتك.
-            </p>
-
-
-            <form onsubmit="enterSite(event)">
-
-                <label for="email">
-                    البريد الإلكتروني
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="أدخل بريدك الإلكتروني"
-                    required
-                >
+    <p class="welcome-text">
+        سجّل دخولك للوصول إلى دروسك وملخصاتك واختباراتك.
+    </p>
 
 
-                <label for="password">
-                    كلمة المرور
-                </label>
+    <form onsubmit="enterSite(event)">
 
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="أدخل كلمة المرور"
-                    required
-                >
+        <label for="email">
+            البريد الإلكتروني
+        </label>
 
-
-                <button type="submit" class="login-button">
-                    🔐 تسجيل الدخول
-                </button>
-
-            </form>
+        <input
+            type="email"
+            id="email"
+            placeholder="أدخل بريدك الإلكتروني"
+            required
+        >
 
 
-            <div class="divider">
-                <span>أو</span>
-            </div>
+        <label for="password">
+            كلمة المرور
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="أدخل كلمة المرور"
+            required
+        >
 
 
-            <button
-                type="button"
-                class="create-account"
-                onclick="showMessage()"
-            >
-                📝 إنشاء حساب جديد
-            </button>
+        <button type="submit" class="login-button">
+            🔐 تسجيل الدخول
+        </button>
+
+    </form>
 
 
-            <p id="message" class="message"></p>
+    <div class="divider">
+        <span>أو</span>
+    </div>
 
-        </div>
+
+    <button
+        type="button"
+        class="create-account"
+        onclick="goToSignup()"
+    >
+        📝 إنشاء حساب جديد
+    </button>
 
 
-        <div class="login-note">
+    <p id="message" class="message"></p>
 
-            <span>📚</span>
+</div>
 
-            <p>
-                تعلّم الرياضيات بطريقة أبسط
-                <br>
-                مع أ. رتاج السعيدية ✨
-            </p>
 
-        </div>
+<div class="login-note">
 
-    </main>
+    <span>📚</span>
 
+    <p>
+        تعلّم الرياضيات بطريقة أبسط
+        <br>
+        مع أ. رتاج السعيدية ✨
+    </p>
+
+</div>
+
+</main>
 
 <footer>
 
-    <p>
-        © نقطة س | أ. رتاج السعيدية ✨
-    </p>
+<p>
+    © نقطة س | أ. رتاج السعيدية ✨
+</p>
 
 </footer>
 
-
-    <script>
-
-        const SUPABASE_URL =
-            "https://nqtuiuglxabkyjlkmnhl.supabase.co";
-
-        const SUPABASE_KEY =
-            "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
-
-
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
-
-
-        // تسجيل الدخول
-        async function enterSite(event) {
-
-            event.preventDefault();
-
-            const email =
-                document.getElementById("email").value.trim();
-
-            const password =
-                document.getElementById("password").value;
-
-            const message =
-                document.getElementById("message");
-
-            message.textContent =
-                "جاري تسجيل الدخول...";
-
-
-            const { data, error } =
-                await supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-
-
-            if (error) {
-
-                message.textContent =
-                    "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-
-                console.error(error);
-
-                return;
-            }
-
-
-            message.textContent =
-                "تم تسجيل الدخول بنجاح 💗";
-
-
-            if (data.user) {
-
-                await supabaseClient
-                    .from("activity")
-                    .insert({
-                        user_id: data.user.id,
-                        page: "index.html",
-                        action: "login"
-                    });
-
-            }
-
-
-            setTimeout(() => {
-
-                window.location.href =
-                    "grades.html";
-
-            }, 500);
-
-        }
-
-
-        // إنشاء حساب
-        async function showMessage() {
-
-            const email =
-                document.getElementById("email").value.trim();
-
-            const password =
-                document.getElementById("password").value;
-
-            const message =
-                document.getElementById("message");
-
-
-            if (!email || !password) {
-
-                message.textContent =
-                    "اكتبي البريد الإلكتروني وكلمة المرور أولًا 💗";
-
-                return;
-            }
-
-
-            if (password.length < 6) {
-
-                message.textContent =
-                    "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
-
-                return;
-            }
-
-
-            message.textContent =
-                "جاري إنشاء الحساب...";
-
-
-            const { data, error } =
-                await supabaseClient.auth.signUp({
-
-                    email: email,
-                    password: password
-
-                });
-
-
-            if (error) {
-
-                message.textContent =
-                    "❌ حدث خطأ: " + error.message;
-
-                console.error(error);
-
-                return;
-            }
-
-
-            if (data.user) {
-
-                const { error: profileError } =
-                    await supabaseClient
-                        .from("profiles")
-                        .insert({
-
-                            id: data.user.id,
-                            full_name: "",
-                            grade: "10"
-
-                        });
-
-
-                if (profileError) {
-
-                    console.error(profileError);
-
-                }
-
-            }
-
-
-            message.textContent =
-                "✅ تم إنشاء الحساب بنجاح! 💗 يمكنك الآن تسجيل الدخول مباشرة.";
-
-        }
-
-    </script>
+<script> const SUPABASE_URL = "https://nqtuiuglxabkyjlkmnhl.supabase.co"; const SUPABASE_KEY = "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY ); // تسجيل الدخول async function enterSite(event) { event.preventDefault(); const email = document.getElementById("email").value.trim(); const password = document.getElementById("password").value; const message = document.getElementById("message"); message.textContent = "جاري تسجيل الدخول..."; const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email, password: password }); if (error) { message.textContent = "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة."; console.error(error); return; } message.textContent = "تم تسجيل الدخول بنجاح 💗"; if (data.user) { await supabaseClient .from("activity") .insert({ user_id: data.user.id, page: "index", action: "login" }); } setTimeout(() => { window.location.href = "grades.html"; }, 500); } // الانتقال إلى صفحة إنشاء الحساب function goToSignup() { window.location.href = "signup.html"; } </script>
 
 </body>
 
 </html>
-```
