@@ -157,35 +157,58 @@ const SUPABASE_URL =
 "https://nqtuiuglxabkyjlkmnhl.supabase.co";
 
 
+javascript
 // تسجيل الدخول
 
-document
-.getElementById("loginForm")
-.addEventListener("submit", async function (event) {
+const loginForm = document.getElementById("loginForm");
 
-event.preventDefault();
+loginForm.addEventListener("submit", async function(event) {
 
+    event.preventDefault();
 
-const email =
-document.getElementById("email").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("message");
 
-const password =
-document.getElementById("password").value;
+    message.textContent = "جاري تسجيل الدخول...";
 
-const message =
-document.getElementById("message");
+    const result = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
 
+    if (result.error) {
 
-message.textContent =
-"جاري تسجيل الدخول...";
+        console.error(result.error);
 
+        message.textContent =
+            "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.";
 
-const { data, error } =
-await supabaseClient.auth.signInWithPassword({
+        return;
+    }
 
-email: email,
+    message.textContent =
+        "تم تسجيل الدخول بنجاح 💗";
 
-password: password
+    const user = result.data.user;
+
+    if (user) {
+
+        await supabaseClient
+            .from("activity")
+            .insert({
+                user_id: user.id,
+                page: "index",
+                action: "login"
+            });
+
+    }
+
+    setTimeout(function() {
+
+        window.location.href = "grades.html";
+
+    }, 500);
 
 });
 
