@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>لوحة المعلمة | نقطة س</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        .teacher-dashboard {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .teacher-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .teacher-title h2 {
+            margin-bottom: 8px;
+        }
+
+        .teacher-title p {
+            color: #777;
+        }
+
+        .student-count {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .student-count strong {
+            font-size: 32px;
+            display: block;
+            color: #b85c7a;
+            margin-bottom: 5px;
+        }
+
+        .students-table-container {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            overflow-x: auto;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .students-table th {
+            padding: 14px;
+            background: #f8e8ee;
+        }
+
+        .students-table td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .students-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .loading-message,
+        .error-message {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+        .error-message {
+            color: #b00020;
+        }
+
+        .back-home {
+            display: block;
+            width: fit-content;
+            margin: 25px auto;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <header>
+
+        <h1>نقطة س</h1>
+
+        <p>لوحة المعلمة 👩🏻‍🏫</p>
+
+    </header>
+
+
+    <main class="teacher-dashboard">
+
+        <div class="teacher-title">
+
+            <h2>مرحبًا أ. رتاج 🌷</h2>
+
+            <p>
+                هنا يمكنك متابعة الطلاب المسجلين ونشاط تسجيل الدخول.
+            </p>
+
+        </div>
+
+
+        <div class="student-count">
+
+            <strong id="studentCount">...</strong>
+
+            <span>
+                عدد الطلاب المسجلين
+            </span>
+
+        </div>
+
+
+        <div class="students-table-container">
+
+            <table class="students-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>الطالب</th>
+
+                        <th>البريد الإلكتروني</th>
+
+                        <th>الصف</th>
+
+                        <th>تاريخ التسجيل</th>
+
+                        <th>آخر دخول</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="studentsTableBody">
+
+                    <tr>
+
+                        <td colspan="5" class="loading-message">
+                            جاري تحميل بيانات الطلاب...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <a href="grades.html" class="back-home">
+            ← العودة إلى المنصة
+        </a>
+
+    </main>
+
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://nqtuiuglxabkyjlkmnhl.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
+
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        async function loadTeacherDashboard() {
+
+            const tableBody =
+                document.getElementById(
+                    "studentsTableBody"
+                );
+
+            const count =
+                document.getElementById(
+                    "studentCount"
+                );
+
+
+            const {
+                data: {
+                    user
+                }
+            } = await supabaseClient.auth.getUser();
+
+
+            if (!user) {
+
+                window.location.href =
+                    "index.html";
+
+                return;
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .rpc("get_teacher_dashboard");
+
+
+            if (error) {
+
+                console.error(error);
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="error-message">
+                            ❌ لا يمكن تحميل بيانات الطلاب.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            count.textContent =
+                data.length;
+
+
+            if (data.length === 0) {
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="loading-message">
+                            لا يوجد طلاب مسجلون حاليًا.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            tableBody.innerHTML =
+                data.map(student => `
+
+                    <tr>
+
+                        <td>
+                            ${
+                                student.student_name &&
+                                student.student_name.trim() !== ""
+                                    ? student.student_name
+                                    : "غير مضاف"
+                            }
+                        </td>
+
+                        <td>
+                            ${student.student_email || "-"}
+                        </td>
+
+                        <td>
+                            ${student.student_grade || "-"}
+                        </td>
+
+                        <td>
+                            ${formatDate(student.registered_at)}
+                        </td>
+
+                        <td>
+                            ${
+                                student.last_login
+                                    ? formatDate(student.last_login)
+                                    : "لم يسجل دخولًا"
+                            }
+                        </td>
+
+                    </tr>
+
+                `).join("");
+
+        }
+
+
+        function formatDate(date) {
+
+            if (!date) {
+                return "-";
+            }
+
+            return new Date(date).toLocaleString(
+                "ar-OM",
+                {
+                    dateStyle: "medium",
+                    timeStyle: "short"
+                }
+            );
+
+        }
+
+
+        loadTeacherDashboard();
+
+    </script>
+
+
+</body>
+
+</html>
