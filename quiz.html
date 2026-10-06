@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -186,6 +185,31 @@
             text-align: center;
             padding: 40px;
         }
+
+        .error-box {
+            background: #fff0f0;
+            border: 2px solid #e5a5a5;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: right;
+            direction: ltr;
+            overflow-wrap: anywhere;
+        }
+
+        .error-title {
+            color: #b33a3a;
+            font-weight: bold;
+            margin-bottom: 10px;
+            direction: rtl;
+        }
+
+        .error-text {
+            color: #7a2222;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.7;
+        }
     </style>
 </head>
 
@@ -215,6 +239,7 @@
     const totalQuestions = 3;
 
     let currentQuestion = 0;
+
     let answers = {
         q1: [],
         q2: [],
@@ -288,8 +313,17 @@
     async function getCurrentUser() {
 
         const {
-            data: { user }
+            data: { user },
+            error
         } = await supabaseClient.auth.getUser();
+
+        if (error) {
+            console.error("GET USER ERROR:", error);
+
+            alert("حدث خطأ في معرفة المستخدم: " + error.message);
+
+            return null;
+        }
 
         if (!user) {
             window.location.href = "index.html";
@@ -409,10 +443,12 @@
                         <td>
                             <select data-item="${option}">
                                 <option value="">اختاري</option>
+
                                 <option value="منفصلة"
                                     ${selected === "منفصلة" ? "selected" : ""}>
                                     بيانات منفصلة
                                 </option>
+
                                 <option value="متصلة"
                                     ${selected === "متصلة" ? "selected" : ""}>
                                     بيانات متصلة
@@ -433,6 +469,7 @@
 
         html += `
             <div class="buttons">
+
                 <button
                     class="back-btn"
                     onclick="previousQuestion()"
@@ -440,6 +477,7 @@
                     السابق
                 </button>
         `;
+
 
         if (currentQuestion < totalQuestions - 1) {
 
@@ -461,6 +499,7 @@
                 </button>
             `;
         }
+
 
         html += `</div>`;
 
@@ -575,12 +614,14 @@
             }
         });
 
+
         if (
             q3CorrectCount ===
             Object.keys(q3Correct).length
         ) {
             score++;
         }
+
 
         return score;
     }
@@ -602,6 +643,7 @@
         if (!user) return;
 
 
+        // محاولة قراءة النتائج السابقة
         const {
             data: previousAttempts,
             error: previousError
@@ -611,13 +653,30 @@
             .eq("user_id", user.id)
             .eq("quiz_id", quizId);
 
+
         if (previousError) {
 
-            console.error(previousError);
+            console.error("SELECT ERROR:", previousError);
 
-            alert(
-                "حدث خطأ أثناء حفظ النتيجة. حاولي مرة أخرى."
-            );
+            document.getElementById("quizArea").innerHTML = `
+                <div class="error-box">
+
+                    <div class="error-title">
+                        ظهر خطأ أثناء قراءة نتائج الاختبار
+                    </div>
+
+                    <div class="error-text">
+                        ${previousError.message}
+                        <br><br>
+                        Code: ${previousError.code || "غير موجود"}
+                        <br>
+                        Details: ${previousError.details || "غير موجود"}
+                        <br>
+                        Hint: ${previousError.hint || "غير موجود"}
+                    </div>
+
+                </div>
+            `;
 
             return;
         }
@@ -627,7 +686,8 @@
             (previousAttempts?.length || 0) + 1;
 
 
-        const { error } =
+        // محاولة حفظ النتيجة
+        const { data: insertedData, error } =
             await supabaseClient
                 .from("quiz_results")
                 .insert({
@@ -636,33 +696,62 @@
                     score: score,
                     total: total,
                     completed_at: new Date().toISOString()
-                });
+                })
+                .select();
 
 
         if (error) {
 
-            console.error(error);
+            console.error("INSERT ERROR:", error);
 
-            alert(
-                "لم يتم حفظ النتيجة. تأكدي من إعدادات Supabase."
-            );
+            document.getElementById("quizArea").innerHTML = `
+                <div class="error-box">
+
+                    <div class="error-title">
+                        ظهر خطأ أثناء حفظ نتيجة الاختبار
+                    </div>
+
+                    <div class="error-text">
+                        ${error.message}
+                        <br><br>
+                        Code: ${error.code || "غير موجود"}
+                        <br>
+                        Details: ${error.details || "غير موجود"}
+                        <br>
+                        Hint: ${error.hint || "غير موجود"}
+                    </div>
+
+                </div>
+            `;
 
             return;
         }
 
 
+        console.log("RESULT SAVED:", insertedData);
+        console.log("ATTEMPT NUMBER:", attemptNumber);
+
+
         let message = "";
 
+
         if (percentage === 100) {
+
             message = "ممتاز جدًا! 🎉 أحسنتِ!";
+
         } else if (percentage >= 66) {
+
             message = "أحسنتِ! لديكِ فهم جيد للدرس 🌷";
+
         } else {
+
             message = "بداية جيدة! راجعي الدرس وحاولي مرة أخرى 💗";
+
         }
 
 
         document.getElementById("quizArea").innerHTML = `
+
             <div class="result">
 
                 <div class="question">
@@ -678,7 +767,8 @@
                 </div>
 
                 <p>
-                    النسبة: <strong>${percentage}%</strong>
+                    النسبة:
+                    <strong>${percentage}%</strong>
                 </p>
 
                 <div class="buttons"
@@ -715,4 +805,3 @@
 
 </body>
 </html>
-
