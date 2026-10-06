@@ -73,7 +73,7 @@ required
 <input
 type="password"
 id="password"
-placeholder="أدخل كلمة المرور"
+placeholder="أدخل كلمة مرورك"
 required
 >
 
@@ -102,6 +102,7 @@ style="display:block; text-decoration:none; box-sizing:border-box;"
 >
 📝 إنشاء حساب جديد
 </a>
+
 
 <p id="message" class="message"></p>
 
@@ -144,6 +145,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
 
+
 const supabaseClient =
 window.supabase.createClient(
 SUPABASE_URL,
@@ -151,112 +153,105 @@ SUPABASE_KEY
 );
 
 
-// زر إنشاء حساب جديد
+const loginForm =
+document.getElementById("loginForm");
 
-const SUPABASE_URL =
-"https://nqtuiuglxabkyjlkmnhl.supabase.co";
-
-
-
-// تسجيل الدخول
-
-const loginForm = document.getElementById("loginForm");
 
 loginForm.addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const message = document.getElementById("message");
 
-    message.textContent = "جاري تسجيل الدخول...";
+    const email =
+    document.getElementById("email").value.trim();
 
-    const result = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-    });
 
-    if (result.error) {
+    const password =
+    document.getElementById("password").value;
 
-        console.error(result.error);
 
-        message.textContent =
-            "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+    const message =
+    document.getElementById("message");
 
-        return;
-    }
 
     message.textContent =
-        "تم تسجيل الدخول بنجاح 💗";
+    "جاري تسجيل الدخول...";
 
-    const user = result.data.user;
 
-    if (user) {
+    const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
 
-        await supabaseClient
-            .from("activity")
-            .insert({
-                user_id: user.id,
-                page: "index",
-                action: "login"
-            });
+        email: email,
+
+        password: password
+
+    });
+
+
+    if (error) {
+
+        console.error(error);
+
+        message.textContent =
+        "❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+
+        return;
 
     }
+
+
+    message.textContent =
+    "تم تسجيل الدخول بنجاح 💗";
+
+
+    if (data.user) {
+
+        await supabaseClient
+        .from("activity")
+        .insert({
+
+            user_id: data.user.id,
+
+            page: "index",
+
+            action: "login"
+
+        });
+
+    }
+
 
     setTimeout(function() {
 
-        window.location.href = "grades.html";
+        window.location.href =
+        "grades.html";
 
     }, 500);
 
 });
 
-
-if (error) {
-
-console.error(error);
-
-message.textContent =
-"❌ البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-
-return;
-
-}
-
-
-message.textContent =
-"تم تسجيل الدخول بنجاح 💗";
-
-
-if (data.user) {
-
-await supabaseClient
-.from("activity")
-.insert({
-
-user_id: data.user.id,
-
-page: "index",
-
-action: "login"
-
-});
-
-}
-
-
-setTimeout(function () {
-
-window.location.href = "grades.html";
-
-}, 500);
-
-});
-
 </script>
+
 
 </body>
 
 </html>
+```
 
+### بعد اللصق
+
+1. اضغطي **Commit changes** في GitHub.
+2. انتظري تقريبًا دقيقة.
+3. افتحي صفحة نقطة س.
+4. سوي **تحديث قوي للصفحة**:
+
+   * على الماك: `Command + Shift + R`
+5. جربي تسجيل الدخول بحساب الطالب التجريبي.
+
+المفروض عند الضغط على **🔐 تسجيل الدخول** يظهر أولًا:
+
+**"جاري تسجيل الدخول..."**
+
+ثم إذا البيانات صحيحة ينتقل إلى `grades.html`.
+
+ولا تضيفي أي كود آخر أسفل `</html>` أو داخل `<script>`.
