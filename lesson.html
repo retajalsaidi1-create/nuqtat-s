@@ -691,32 +691,23 @@
                    زر الملخص
                 ================================== */
 
-                document
-                    .getElementById("summaryButton")
-                    .addEventListener(
-                        "click",
-                        async function(event) {
+   
+document.getElementById("summaryButton").addEventListener("click", async function(event) {
+  event.preventDefault();
 
-                            event.preventDefault();
+  const summaryFiles = {
+    "6": "١-٢ جمع البيانات وتصنيفها.pdf",
+    "7": "٢-٢ ملخص درس تنظيم البيانات.pdf",
+    "8": "٢-٣ ملخص درس استخدام الجداول لعرض البيانات.pdf"
+  };
 
+  const file = summaryFiles[lessonNumber];
 
-                            await recordActivity(
-                                user,
-                                "summary"
-                            );
-
-
-                            if (lessonNumber === "6") {
-
-                                window.open(
-                                    "١-٢%20جمع%20البيانات%20وتصنيفها.pdf",
-                                    "_blank"
-                                );
-
-                            }
-
-                        }
-                    );
+  if (file) {
+    window.open(encodeURI(file), "_blank");
+    await recordActivity(user, "summary");
+  }
+});
 
 
                 /* ==================================
