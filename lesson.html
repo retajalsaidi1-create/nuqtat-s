@@ -696,22 +696,24 @@
 
 
 
+
 document.getElementById("summaryButton").addEventListener("click", async function(event) {
   event.preventDefault();
 
   const summaryFiles = {
-    "6": "https://retajalsaidi1-create.github.io/nuqtat-s/١-٢%20جمع%20البيانات%20وتصنيفها.pdf",
-    "7": "https://retajalsaidi1-create.github.io/nuqtat-s/%E2%80%8E%E2%81%A8%D9%A2-%D9%A2%20%D9%85%D9%84%D8%AE%D8%B5%20%D8%AF%D8%B1%D8%B3%20%D8%AA%D9%86%D8%B8%D9%8A%D9%85%20%D8%A7%D9%84%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA%E2%81%A9.pdf",
-    "8": "https://retajalsaidi1-create.github.io/nuqtat-s/%E2%80%8E%E2%81%A8%D9%A2-%D9%A3%20%D9%85%D9%84%D8%AE%D8%B5%20%D8%AF%D8%B1%D8%B3%20%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85%20%D8%A7%D9%84%D8%AC%D8%AF%D8%A7%D9%88%D9%84%20%D9%84%D8%B9%D8%B1%D8%B6%20%D8%A7%D9%84%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA%E2%81%A9.pdf"
+    "6": "١-٢ جمع البيانات وتصنيفها.pdf",
+    "7": "\u200E\u2068٢-٢ ملخص درس تنظيم البيانات\u2069.pdf",
+    "8": "\u200E\u2068٢-٣ ملخص درس استخدام الجداول لعرض البيانات\u2069.pdf"
   };
 
   const file = summaryFiles[lessonNumber];
 
   if (file) {
-    window.open(file, "_blank");
+    window.open(encodeURIComponent(file), "_blank");
     await recordActivity(user, "summary");
   }
 });
+
 
 
 
