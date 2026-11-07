@@ -14,6 +14,28 @@
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <style>
+        #videoBox {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        #videoBox iframe {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            height: auto;
+            border: none;
+            border-radius: 14px;
+            background: #000;
+        }
+
+        #videoPlaceholder {
+            text-align: center;
+            padding: 25px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -29,10 +51,7 @@
 
     <main class="container">
 
-
-        <!-- ==============================
-             شرح الدرس
-        ============================== -->
+        <!-- شرح الدرس -->
 
         <div class="card">
 
@@ -42,21 +61,18 @@
                 شاهد فيديو شرح الدرس هنا.
             </p>
 
-            <div id="videoBox"
-                 style="cursor: pointer;">
+            <div id="videoBox">
 
-                <p>
+                <div id="videoPlaceholder">
                     سيتم إضافة فيديو الشرح هنا.
-                </p>
+                </div>
 
             </div>
 
         </div>
 
 
-        <!-- ==============================
-             ملخص الدرس
-        ============================== -->
+        <!-- ملخص الدرس -->
 
         <div class="card">
 
@@ -82,9 +98,7 @@
         </div>
 
 
-        <!-- ==============================
-             اختبار الدرس
-        ============================== -->
+        <!-- اختبار الدرس -->
 
         <div class="card">
 
@@ -110,9 +124,7 @@
         </div>
 
 
-        <!-- ==============================
-             إكمال الدرس
-        ============================== -->
+        <!-- إكمال الدرس -->
 
         <div class="card">
 
@@ -145,9 +157,7 @@
         </div>
 
 
-        <!-- ==============================
-             العودة إلى الوحدة
-        ============================== -->
+        <!-- العودة إلى الوحدة -->
 
         <a
             id="backButton"
@@ -162,13 +172,10 @@
 
         </a>
 
-
     </main>
 
 
-    <!-- ==============================
-         Footer
-    ============================== -->
+    <!-- Footer -->
 
     <footer>
 
@@ -185,6 +192,7 @@
 
 
     <!-- قائمة الطالب -->
+
     <script src="user-menu.js"></script>
 
 
@@ -344,6 +352,17 @@
 
 
         /* ==========================================
+           فيديوهات شرح الدروس
+        ========================================== */
+
+        const lessonVideos = {
+
+            "1": "https://drive.google.com/file/d/1P0gqSiwYYC_F8unruapDcURtWXeWEJK9/preview"
+
+        };
+
+
+        /* ==========================================
            التأكد من وجود الدرس
         ========================================== */
 
@@ -463,18 +482,9 @@
                 await supabaseClient
                     .from("activity")
                     .select("id")
-                    .eq(
-                        "user_id",
-                        user.id
-                    )
-                    .eq(
-                        "page",
-                        lessonPage
-                    )
-                    .eq(
-                        "action",
-                        "complete"
-                    )
+                    .eq("user_id", user.id)
+                    .eq("page", lessonPage)
+                    .eq("action", "complete")
                     .limit(1);
 
 
@@ -553,18 +563,9 @@
                 await supabaseClient
                     .from("activity")
                     .select("id")
-                    .eq(
-                        "user_id",
-                        user.id
-                    )
-                    .eq(
-                        "page",
-                        lessonPage
-                    )
-                    .eq(
-                        "action",
-                        "complete"
-                    )
+                    .eq("user_id", user.id)
+                    .eq("page", lessonPage)
+                    .eq("action", "complete")
                     .limit(1);
 
 
@@ -631,6 +632,62 @@
 
 
         /* ==========================================
+           تشغيل فيديو الدرس
+        ========================================== */
+
+        function displayLessonVideo(user) {
+
+            const videoBox =
+                document.getElementById("videoBox");
+
+            const videoUrl =
+                lessonVideos[lessonNumber];
+
+
+            if (!videoUrl) {
+
+                videoBox.innerHTML = `
+                    <div id="videoPlaceholder">
+                        <p>سيتم إضافة فيديو الشرح قريبًا ✨</p>
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            videoBox.innerHTML = `
+                <iframe
+                    src="${videoUrl}"
+                    title="شرح الدرس"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            `;
+
+
+            const videoFrame =
+                videoBox.querySelector("iframe");
+
+
+            videoFrame.addEventListener(
+                "load",
+                async function() {
+
+                    await recordActivity(
+                        user,
+                        "video"
+                    );
+
+                },
+                { once: true }
+            );
+
+        }
+
+
+        /* ==========================================
            تشغيل الصفحة
         ========================================== */
 
@@ -677,44 +734,64 @@
                 }
 
 
-                await recordLessonView(
-                    user
-                );
+                await recordLessonView(user);
 
 
-                await checkLessonCompletion(
-                    user
-                );
+                await checkLessonCompletion(user);
+
+
+                /* ==================================
+                   عرض فيديو الدرس
+                ================================== */
+
+                displayLessonVideo(user);
 
 
                 /* ==================================
                    زر الملخص
                 ================================== */
 
-   
+                document
+                    .getElementById("summaryButton")
+                    .addEventListener(
+                        "click",
+                        async function(event) {
+
+                            event.preventDefault();
 
 
+                            const summaryFiles = {
+
+                                "6": "١-٢ جمع البيانات وتصنيفها.pdf",
+
+                                "7": "\u200E\u2068٢-٢ ملخص درس تنظيم البيانات\u2069.pdf",
+
+                                "8": "\u200E\u2068٢-٣ ملخص درس استخدام الجداول لعرض البيانات\u2069.pdf"
+
+                            };
 
 
-
-document.getElementById("summaryButton").addEventListener("click", async function(event) {
-  event.preventDefault();
-
-  const summaryFiles = {
-    "6": "١-٢ جمع البيانات وتصنيفها.pdf",
-    "7": "\u200E\u2068٢-٢ ملخص درس تنظيم البيانات\u2069.pdf",
-    "8": "\u200E\u2068٢-٣ ملخص درس استخدام الجداول لعرض البيانات\u2069.pdf"
-  };
-
-  const file = summaryFiles[lessonNumber];
-
-  if (file) {
-    window.open(encodeURIComponent(file), "_blank");
-    await recordActivity(user, "summary");
-  }
-});
+                            const file =
+                                summaryFiles[lessonNumber];
 
 
+                            if (file) {
+
+                                window.open(
+                                    encodeURIComponent(file),
+                                    "_blank"
+                                );
+
+
+                                await recordActivity(
+                                    user,
+                                    "summary"
+                                );
+
+                            }
+
+                        }
+                    );
 
 
                 /* ==================================
@@ -730,17 +807,11 @@ document.getElementById("summaryButton").addEventListener("click", async functio
                             event.preventDefault();
 
 
-                            /* تسجيل بدء الاختبار */
-
                             await recordActivity(
                                 user,
                                 "quiz"
                             );
 
-
-                            /*
-                             * فتح اختبار الدرس ٢-١
-                             */
 
                             if (lessonNumber === "6") {
 
@@ -760,30 +831,6 @@ document.getElementById("summaryButton").addEventListener("click", async functio
 
 
                 /* ==================================
-                   منطقة الفيديو
-                ================================== */
-
-                document
-                    .getElementById("videoBox")
-                    .addEventListener(
-                        "click",
-                        async function() {
-
-                            await recordActivity(
-                                user,
-                                "video"
-                            );
-
-
-                            console.log(
-                                "تم تسجيل مشاهدة/فتح الفيديو 🎥"
-                            );
-
-                        }
-                    );
-
-
-                /* ==================================
                    زر إكمال الدرس
                 ================================== */
 
@@ -793,9 +840,7 @@ document.getElementById("summaryButton").addEventListener("click", async functio
                         "click",
                         function() {
 
-                            completeLesson(
-                                user
-                            );
+                            completeLesson(user);
 
                         }
                     );
@@ -824,4 +869,3 @@ document.getElementById("summaryButton").addEventListener("click", async functio
 </body>
 
 </html>
-
