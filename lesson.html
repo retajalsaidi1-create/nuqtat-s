@@ -3,7 +3,6 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -35,45 +34,34 @@
             padding: 25px;
         }
     </style>
-
 </head>
 
 <body>
 
     <header>
-
         <h1 id="lessonTitle">الدرس</h1>
-
         <p id="unitTitle">نقطة س التعليمية</p>
-
     </header>
-
 
     <main class="container">
 
         <!-- شرح الدرس -->
-
         <div class="card">
 
             <h2>🎥 شرح الدرس</h2>
 
-            <p>
-                شاهد فيديو شرح الدرس هنا.
-            </p>
+            <p>شاهد فيديو شرح الدرس هنا.</p>
 
             <div id="videoBox">
-
                 <div id="videoPlaceholder">
                     سيتم إضافة فيديو الشرح هنا.
                 </div>
-
             </div>
 
         </div>
 
 
         <!-- ملخص الدرس -->
-
         <div class="card">
 
             <h2>📄 ملخص الدرس</h2>
@@ -89,9 +77,7 @@
 
                 <span>📄</span>
 
-                <strong>
-                    فتح ملخص الدرس
-                </strong>
+                <strong>فتح ملخص الدرس</strong>
 
             </a>
 
@@ -99,7 +85,6 @@
 
 
         <!-- اختبار الدرس -->
-
         <div class="card">
 
             <h2>📝 اختبار الدرس</h2>
@@ -115,9 +100,7 @@
 
                 <span>📝</span>
 
-                <strong>
-                    بدء الاختبار
-                </strong>
+                <strong>بدء الاختبار</strong>
 
             </a>
 
@@ -125,7 +108,6 @@
 
 
         <!-- إكمال الدرس -->
-
         <div class="card">
 
             <h2>🎯 إكمال الدرس</h2>
@@ -148,9 +130,7 @@
 
                 <span>✅</span>
 
-                <strong>
-                    تم إكمال الدرس
-                </strong>
+                <strong>تم إكمال الدرس</strong>
 
             </button>
 
@@ -158,7 +138,6 @@
 
 
         <!-- العودة إلى الوحدة -->
-
         <a
             id="backButton"
             href="semester1.html"
@@ -166,9 +145,7 @@
 
             <span>⬅️</span>
 
-            <strong>
-                العودة إلى الوحدة
-            </strong>
+            <strong>العودة إلى الوحدة</strong>
 
         </a>
 
@@ -176,7 +153,6 @@
 
 
     <!-- Footer -->
-
     <footer>
 
         <p>
@@ -192,7 +168,6 @@
 
 
     <!-- قائمة الطالب -->
-
     <script src="user-menu.js"></script>
 
 
@@ -357,20 +332,19 @@
 
         const lessonVideos = {
 
-            "1": "https://drive.google.com/file/d/1P0gqSiwYYC_F8unruapDcURtWXeWEJK9/preview"
+            "1":
+                "https://drive.google.com/file/d/1P0gqSiwYYC_F8unruapDcURtWXeWEJK9/preview"
 
         };
 
 
         /* ==========================================
-           التأكد من وجود الدرس
+           التأكد من وجود الدرس وعرض بياناته
         ========================================== */
 
         if (!lessons[lessonNumber]) {
 
-            console.error(
-                "رقم الدرس غير صحيح"
-            );
+            console.error("رقم الدرس غير صحيح");
 
         } else {
 
@@ -379,12 +353,10 @@
                 .textContent =
                 lessons[lessonNumber].title;
 
-
             document
                 .getElementById("unitTitle")
                 .textContent =
                 lessons[lessonNumber].unit;
-
 
             document
                 .getElementById("backButton")
@@ -423,7 +395,6 @@
 
                         });
 
-
                 if (error) {
 
                     console.error(
@@ -435,14 +406,12 @@
 
                 }
 
-
                 console.log(
                     "تم تسجيل النشاط:",
                     action
                 );
 
                 return true;
-
 
             } catch (error) {
 
@@ -487,7 +456,6 @@
                     .eq("action", "complete")
                     .limit(1);
 
-
             if (error) {
 
                 console.error(
@@ -498,7 +466,6 @@
                 return;
 
             }
-
 
             if (data && data.length > 0) {
 
@@ -520,13 +487,11 @@
                     "completeButton"
                 );
 
-
             button.innerHTML =
                 `
                     <span>✅</span>
                     <strong>تم إكمال الدرس</strong>
                 `;
-
 
             button.disabled = true;
 
@@ -548,16 +513,13 @@
                     "completeButton"
                 );
 
-
             button.disabled = true;
-
 
             button.innerHTML =
                 `
                     <span>⏳</span>
                     <strong>جاري التسجيل...</strong>
                 `;
-
 
             const { data: existing, error: checkError } =
                 await supabaseClient
@@ -568,14 +530,12 @@
                     .eq("action", "complete")
                     .limit(1);
 
-
             if (checkError) {
 
                 console.error(
                     "خطأ في التحقق:",
                     checkError
                 );
-
 
                 button.disabled = false;
 
@@ -589,7 +549,6 @@
 
             }
 
-
             if (existing && existing.length > 0) {
 
                 showCompletedButton();
@@ -598,13 +557,11 @@
 
             }
 
-
             const success =
                 await recordActivity(
                     user,
                     "complete"
                 );
-
 
             if (!success) {
 
@@ -620,9 +577,7 @@
 
             }
 
-
             showCompletedButton();
-
 
             alert(
                 "تم تسجيل إكمال الدرس بنجاح ✅"
@@ -643,7 +598,6 @@
             const videoUrl =
                 lessonVideos[lessonNumber];
 
-
             if (!videoUrl) {
 
                 videoBox.innerHTML = `
@@ -656,20 +610,18 @@
 
             }
 
-
             videoBox.innerHTML = `
                 <iframe
                     src="${videoUrl}"
                     title="شرح الدرس"
+                    loading="lazy"
                     allow="autoplay; fullscreen; picture-in-picture"
                     allowfullscreen>
                 </iframe>
             `;
 
-
             const videoFrame =
                 videoBox.querySelector("iframe");
-
 
             videoFrame.addEventListener(
                 "load",
@@ -701,12 +653,10 @@
 
                 }
 
-
                 const { data, error } =
                     await supabaseClient
                         .auth
                         .getUser();
-
 
                 if (error) {
 
@@ -719,10 +669,8 @@
 
                 }
 
-
                 const user =
                     data.user;
-
 
                 if (!user) {
 
@@ -733,16 +681,17 @@
 
                 }
 
+                /* تسجيل مشاهدة الدرس */
 
                 await recordLessonView(user);
 
 
+                /* التحقق من إكمال الدرس */
+
                 await checkLessonCompletion(user);
 
 
-                /* ==================================
-                   عرض فيديو الدرس
-                ================================== */
+                /* عرض فيديو الدرس */
 
                 displayLessonVideo(user);
 
@@ -759,21 +708,21 @@
 
                             event.preventDefault();
 
-
                             const summaryFiles = {
 
-                                "6": "١-٢ جمع البيانات وتصنيفها.pdf",
+                                "6":
+                                    "١-٢ جمع البيانات وتصنيفها.pdf",
 
-                                "7": "\u200E\u2068٢-٢ ملخص درس تنظيم البيانات\u2069.pdf",
+                                "7":
+                                    "\u200E\u2068٢-٢ ملخص درس تنظيم البيانات\u2069.pdf",
 
-                                "8": "\u200E\u2068٢-٣ ملخص درس استخدام الجداول لعرض البيانات\u2069.pdf"
+                                "8":
+                                    "\u200E\u2068٢-٣ ملخص درس استخدام الجداول لعرض البيانات\u2069.pdf"
 
                             };
 
-
                             const file =
                                 summaryFiles[lessonNumber];
-
 
                             if (file) {
 
@@ -781,7 +730,6 @@
                                     encodeURIComponent(file),
                                     "_blank"
                                 );
-
 
                                 await recordActivity(
                                     user,
@@ -806,12 +754,10 @@
 
                             event.preventDefault();
 
-
                             await recordActivity(
                                 user,
                                 "quiz"
                             );
-
 
                             if (lessonNumber === "6") {
 
@@ -844,7 +790,6 @@
 
                         }
                     );
-
 
             } catch (error) {
 
