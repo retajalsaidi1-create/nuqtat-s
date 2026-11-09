@@ -746,34 +746,41 @@ const lessonVideos = {
                    زر الاختبار
                 ================================== */
 
-                document
-                    .getElementById("quizButton")
-                    .addEventListener(
-                        "click",
-                        async function(event) {
+                
+/* ==================================
+   زر الاختبار
+================================== */
 
-                            event.preventDefault();
+document
+    .getElementById("quizButton")
+    .addEventListener("click", async function(event) {
 
-                            await recordActivity(
-                                user,
-                                "quiz"
-                            );
+        event.preventDefault();
 
-                            if (lessonNumber === "6") {
+        await recordActivity(user, "quiz");
 
-                                window.location.href =
-                                    "quiz.html?lesson=6";
+        // ربط كل درس بملف الاختبار الخاص به
+        const quizPages = {
 
-                            } else {
+            "6": "quiz.html?lesson=6",
 
-                                console.log(
-                                    "لا يوجد اختبار لهذا الدرس حاليًا."
-                                );
+            "7": "quiz2-2.html?lesson=7"
 
-                            }
+        };
 
-                        }
-                    );
+        const quizLink = quizPages[lessonNumber];
+
+        if (quizLink) {
+
+            window.location.href = quizLink;
+
+        } else {
+
+            alert("اختبار هذا الدرس غير متوفر حاليًا 🌷");
+
+        }
+
+    });
 
 
                 /* ==================================
