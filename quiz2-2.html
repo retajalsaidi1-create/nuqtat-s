@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -14,16 +15,23 @@ body{margin:0;font-family:Arial,sans-serif;background:#fff7fa;color:#3f3540;line
 .header h1{color:#9b657d;margin-bottom:8px}
 .header p{color:#777;margin:0}
 .quiz-card{background:#fff;border-radius:20px;padding:26px;box-shadow:0 5px 25px #00000012}
-.progress{color:#9b657d;font-weight:bold;margin-bottom:18px}
+.progress{color:#9b657d;font-weight:bold;margin-bottom:10px}
 .progress-track{height:8px;background:#f2e5eb;border-radius:20px;margin:8px 0 22px;overflow:hidden}
 .progress-fill{height:100%;background:#dba8bd;border-radius:20px;transition:width .2s}
-.question{font-size:20px;font-weight:bold;line-height:1.9;margin-bottom:18px}
+.question{font-size:19px;font-weight:bold;line-height:1.9;margin-bottom:15px}
 .instruction{background:#fff0f5;padding:12px 15px;border-radius:12px;margin-bottom:18px;color:#765665}
 .options{display:grid;gap:11px}
-.option{display:block;border:2px solid #eadce3;border-radius:14px;padding:13px 15px;cursor:pointer;transition:.2s;background:#fff}
+.option{display:block;border:2px solid #eadce3;border-radius:14px;padding:13px 15px;cursor:pointer;background:#fff}
 .option:hover{border-color:#c88fa8;background:#fff8fb}
 .option.selected{border-color:#9b657d;background:#fbeaf1}
 .option input{margin-left:9px;accent-color:#9b657d}
+.answer-input{width:100%;padding:15px;border:2px solid #eadce3;border-radius:12px;font-size:18px;font-family:Arial;text-align:center;outline:none;background:#fff}
+.answer-input:focus{border-color:#9b657d}
+.diagram{background:#fffafd;border:1px solid #eadce3;border-radius:15px;padding:17px;margin:18px 0;text-align:center;overflow-x:auto}
+.diagram table{border-collapse:collapse;margin:auto;min-width:220px}
+.diagram th,.diagram td{border:1px solid #d9bdca;padding:9px 18px;text-align:center}
+.diagram th{background:#fbeaf1;color:#765665}
+.diagram svg{max-width:100%;height:auto}
 .buttons{display:flex;justify-content:space-between;gap:12px;margin-top:28px}
 button{border:0;border-radius:12px;padding:13px 23px;font-size:16px;cursor:pointer;font-weight:bold}
 .next-btn,.finish-btn,.home-btn{background:#9b657d;color:#fff}
@@ -40,12 +48,18 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .review-item strong{display:block;margin-bottom:5px}
 .answer-correct{color:#287844;font-weight:bold}
 .answer-wrong{color:#b33a3a}
-.explanation{color:#665962;font-size:14px;margin-top:5px}
+.explanation{color:#665962;font-size:14px;margin-top:7px}
 .error-box{background:#fff0f0;border:2px solid #e5a5a5;border-radius:15px;padding:20px;margin-top:20px;text-align:right;direction:ltr;overflow-wrap:anywhere}
 .error-title{color:#b33a3a;font-weight:bold;margin-bottom:10px;direction:rtl}
 .error-text{color:#7a2222;font-family:monospace;font-size:14px;line-height:1.7}
 .loading{text-align:center;padding:40px}
-@media(max-width:600px){.container{margin:22px auto}.quiz-card{padding:18px}.question{font-size:18px}.buttons button{padding:12px 15px}}
+@media(max-width:600px){
+.container{margin:22px auto}
+.quiz-card{padding:18px}
+.question{font-size:17px}
+.buttons button{padding:12px 15px}
+.diagram th,.diagram td{padding:7px 11px}
+}
 </style>
 </head>
 
@@ -53,8 +67,9 @@ button:disabled{opacity:.45;cursor:not-allowed}
 <div class="container">
   <div class="header">
     <h1>اختبار الدرس ٢-٢</h1>
-    <p>تنظيم البيانات</p>
+    <p>تنظيم البيانات | نقطة س</p>
   </div>
+
   <div id="quizArea" class="quiz-card">
     <div class="loading">جاري تحميل الاختبار...</div>
   </div>
@@ -62,79 +77,173 @@ button:disabled{opacity:.45;cursor:not-allowed}
 
 <script>
 const SUPABASE_URL = "https://nqtuiuglxabkyjlkmnhl.supabase.co";
-
 const SUPABASE_KEY = "sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
 
 const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
-/* تأكدي من رقم الاختبار في جدول quizzes */
 const quizId = 2;
 
 let currentQuestion = 0;
 let selectedAnswers = {};
 
+/* الرسومات التوضيحية */
+const stemLeafDiagram = `
+<div class="diagram">
+  <strong>تمثيل الساق والورقة لأطوال مجموعة من الطالبات</strong>
+  <table>
+    <tr><th>الساق</th><th>الأوراق</th></tr>
+    <tr><td>١٤</td><td>٥ &nbsp; ٧ &nbsp; ٩</td></tr>
+    <tr><td>١٥</td><td>٠ &nbsp; ٢ &nbsp; ٥ &nbsp; ٨</td></tr>
+    <tr><td>١٦</td><td>١ &nbsp; ٤ &nbsp; ٧</td></tr>
+    <tr><td>١٧</td><td>٢ &nbsp; ٥ &nbsp; ٨</td></tr>
+    <tr><td>١٨</td><td>٠</td></tr>
+  </table>
+  <p style="font-size:13px;color:#765665">
+    المفتاح: ١٤ | ٥ تعني ١٤٥ سم
+  </p>
+</div>`;
+
+const rainDiagram = `
+<div class="diagram">
+  <strong>معدل سقوط الأمطار</strong>
+  <div style="display:flex;justify-content:center;gap:35px;flex-wrap:wrap;margin-top:15px">
+    <div>
+      <div style="font-size:35px">☁️ ☁️ ☁️ ◐</div>
+      <strong>أغسطس</strong>
+    </div>
+    <div>
+      <div style="font-size:35px">☁️ ☁️ ◐</div>
+      <strong>أكتوبر</strong>
+    </div>
+  </div>
+  <p style="font-size:14px;color:#765665">المفتاح: ☁️ = ٢ ملم ، ◐ = ١ ملم</p>
+</div>`;
+
+const museumDiagram = `
+<div class="diagram">
+  <strong>عدد زوار المتحف</strong>
+  <div style="display:flex;justify-content:center;gap:25px;flex-wrap:wrap;margin-top:15px">
+    <div>
+      <div style="font-size:32px">● ● ● ◐</div>
+      <strong>شعبان</strong>
+    </div>
+    <div>
+      <div style="font-size:32px">● ● ● ● ● ◕</div>
+      <strong>شوال</strong>
+    </div>
+  </div>
+  <p style="font-size:14px;color:#765665">
+    المفتاح: ● = ١٠٠ زائر ، نصف الرمز = ٥٠ زائرًا
+  </p>
+</div>`;
+
+const carsDiagram = `
+<div class="diagram">
+  <strong>ماركات السيارات المفضلة</strong>
+  <svg viewBox="0 0 520 300" role="img" aria-label="رسم بياني بالأعمدة لماركات السيارات">
+    <line x1="65" y1="25" x2="65" y2="235" stroke="#765665" stroke-width="2"/>
+    <line x1="65" y1="235" x2="490" y2="235" stroke="#765665" stroke-width="2"/>
+    ${[0,20,40,60,80].map((v)=>`
+      <line x1="65" y1="${235-v*2.3}" x2="490" y2="${235-v*2.3}" stroke="#eadce3" stroke-width="1"/>
+      <text x="48" y="${240-v*2.3}" text-anchor="end" font-size="12" fill="#765665">${v}</text>
+    `).join("")}
+    ${[
+      ["نيسان",40,100],
+      ["سوبارو",30,180],
+      ["تويوتا",80,260],
+      ["ميتسوبيشي",20,340],
+      ["مازدا",30,420]
+    ].map(([name,value,x])=>`
+      <rect x="${x}" y="${235-value*2.3}" width="42" height="${value*2.3}" rx="5" fill="#dba8bd"/>
+      <text x="${x+21}" y="${225-value*2.3}" text-anchor="middle" font-size="12" fill="#765665">${value}</text>
+      <text x="${x+21}" y="255" text-anchor="middle" font-size="12" fill="#765665">${name}</text>
+    `).join("")}
+    <text x="20" y="18" font-size="12" fill="#765665">التكرار</text>
+  </svg>
+</div>`;
+
+/* الأسئلة */
 const questions = [
 
 {
-question:"سُجّلت أعداد السيارات التي تجاوزت نقطة مرور خلال ساعة: ١٦، ٤٨، ١١، ٣١، ٥، ١، ٤٥، ٢٩، ٣١، ٧، ٢٠، ٢٢. عند تنظيم البيانات بطريقة الساق والورقة، ما الأوراق التي تقابل الساق ٣؟",
-
-options:["١ ، ١","٠ ، ٢","٥ ، ٨","١ ، ٦"],
-correct:0,
-
+type:"text",
+question:"سُجّلت أعداد السيارات التي تجاوزت نقطة مرور خلال ساعة: ١٦، ٤٨، ١١، ٣١، ٥، ١، ٤٥، ٢٩، ٣١، ٧، ٢٠، ٢٢. نظّمي البيانات بطريقة الساق والورقة، واكتبي الأوراق التي تقابل الساق ٣.",
+instruction:"اكتبي الأوراق بالترتيب من الأصغر إلى الأكبر، وافصلي بينها بفاصلة.",
+placeholder:"مثال: ١ ، ٢ ، ٣",
+answers:["1,1","١,١","1 ، 1","١ ، ١","1 1","١ ١"],
+displayAnswer:"١ ، ١",
 explanation:"القيم التي تقع في الثلاثينات هي ٣١ و٣١؛ لذلك الساق ٣ وأوراقها ١ ، ١."
 },
 
 {
-question:"يوضح تمثيل الساق والورقة أطوال الطالبات. إذا كان أقصر طول ١٤٥ سم وأطول طول ١٨٠ سم، فما الفرق بينهما؟",
-
-options:["٣٣ سم","٣٤ سم","٣٥ سم","٣٦ سم"],
-correct:2,
-
-explanation:"الفرق = أكبر قيمة − أصغر قيمة = ١٨٠ − ١٤٥ = ٣٥ سم."
+type:"text",
+question:"يوضح التمثيل الآتي أطوال مجموعة من الطالبات. ما الفرق بين أطول طول وأقصر طول؟",
+diagram:stemLeafDiagram,
+instruction:"اكتبي الإجابة بالسم.",
+placeholder:"الفرق = ؟ سم",
+answers:["35","٣٥"],
+displayAnswer:"٣٥ سم",
+explanation:"أقصر طول ١٤٥ سم وأطول طول ١٨٠ سم. الفرق = ١٨٠ − ١٤٥ = ٣٥ سم."
 },
 
 {
-question:"في مخطط بالصور لمعدل سقوط الأمطار، تمثل صورة السحابة الكاملة ٢ ملم. إذا كان تمثيل شهر أغسطس ٣ سحب ونصف، وتمثيل شهر أكتوبر سحابتين ونصف، فبكم يزيد معدل سقوط الأمطار في أغسطس عن أكتوبر؟",
-
-options:["١ ملم","٢ ملم","٣ ملم","٤ ملم"],
-correct:1,
-
-explanation:"أغسطس = ٣٫٥ × ٢ = ٧ ملم، وأكتوبر = ٢٫٥ × ٢ = ٥ ملم؛ والفرق = ٢ ملم."
+type:"text",
+question:"يوضح التمثيل بالصور معدل سقوط الأمطار في شهرَي أغسطس وأكتوبر. بكم يزيد معدل سقوط الأمطار في أغسطس عن أكتوبر؟",
+diagram:rainDiagram,
+instruction:"اكتبي الناتج العددي بالملليمتر.",
+placeholder:"الإجابة",
+answers:["2","٢"],
+displayAnswer:"٢ ملم",
+explanation:"أغسطس = ٣٫٥ × ٢ = ٧ ملم، وأكتوبر = ٢٫٥ × ٢ = ٥ ملم. الفرق = ٢ ملم."
 },
 
 {
-question:"في التمثيل بالصور لعدد زوار المتحف، تمثل الدائرة الكاملة ١٠٠ زائر. إذا كان عدد الزوار في شعبان ٣ دوائر ونصف، وفي شوال ٥ دوائر وثلاثة أرباع، فما إجمالي عدد الزوار في الشهرين؟",
-
-options:["٨٢٥ زائرًا","٩٠٠ زائر","٩٢٥ زائرًا","١٠٠٠ زائر"],
-correct:2,
-
-explanation:"شعبان = ٣٥٠ زائرًا، وشوال = ٥٧٥ زائرًا؛ المجموع = ٩٢٥ زائرًا."
+type:"text",
+question:"يوضح التمثيل بالصور عدد زوار المتحف في شهرَي شعبان وشوال. احسبي إجمالي عدد الزوار في الشهرين.",
+diagram:museumDiagram,
+instruction:"اكتبي العدد الكلي للزوار.",
+placeholder:"إجمالي الزوار",
+answers:["925","٩٢٥"],
+displayAnswer:"٩٢٥ زائرًا",
+explanation:"شعبان = ٣٥٠ زائرًا، وشوال = ٥٧٥ زائرًا. المجموع = ٩٢٥ زائرًا."
 },
 
 {
-question:"يوضح مخطط بالأعمدة ماركات السيارات المفضلة لدى مجموعة من الأشخاص. إذا كانت تكرارات الماركات هي: نيسان ٤٠، سوبارو ٣٠، تويوتا ٨٠، ميتسوبيشي ٢٠، مازدا ٣٠؛ فما تكرار ماركة تويوتا؟",
-
+type:"choice",
+question:"يوضح الرسم البياني بالأعمدة ماركات السيارات المفضلة لدى مجموعة من الأشخاص. ما تكرار ماركة تويوتا؟",
+diagram:carsDiagram,
+instruction:"اختاري الإجابة الصحيحة.",
 options:["٢٠","٣٠","٤٠","٨٠"],
 correct:3,
-
 explanation:"نقرأ ارتفاع عمود تويوتا على محور التكرار، فنجد أن تكراره ٨٠ شخصًا."
 },
 
 {
-question:"يبين جدول تكراري أطوال النباتات: الفئة ٤٠–٤٩ تكرارها ٥، والفئة ٥٠–٥٩ تكرارها ٧، والفئة ٦٠–٦٩ تكرارها ٨. كم عدد النباتات التي أطوالها ٤٠ سم على الأقل ولا تزيد عن ٦٩ سم؟",
-
-options:["١٥ نباتًا","١٨ نباتًا","٢٠ نباتًا","٢٥ نباتًا"],
-correct:2,
-
-explanation:"نجمع تكرارات الفئات المطلوبة: ٥ + ٧ + ٨ = ٢٠ نباتًا."
+type:"text",
+question:"يبين الجدول التكراري أطوال النباتات الآتية:",
+diagram:`
+<div class="diagram">
+<table>
+<tr><th>فئة الطول (سم)</th><th>التكرار</th></tr>
+<tr><td>٤٠ – ٤٩</td><td>٥</td></tr>
+<tr><td>٥٠ – ٥٩</td><td>٧</td></tr>
+<tr><td>٦٠ – ٦٩</td><td>٨</td></tr>
+</table>
+</div>`,
+instruction:"احسبي مجموع النباتات التي أطوالها من ٤٠ إلى ٦٩ سم.",
+placeholder:"عدد النباتات",
+answers:["20","٢٠"],
+displayAnswer:"٢٠ نباتًا",
+explanation:"نجمع التكرارات: ٥ + ٧ + ٨ = ٢٠ نباتًا."
 },
 
 {
+type:"choice",
 question:"في مخطط بالأعمدة لعدد القصص التي قرأتها الطالبات، كان تكرار الفئة (٢٠–٢٤ قصة) يساوي ٦. ماذا يعني ذلك؟",
-
+instruction:"اختاري التفسير الصحيح للتكرار.",
 options:[
 "٦ طالبات قرأن من ٢٠ إلى ٢٤ قصة",
 "عدد القصص في الفئة هو ٦ فقط",
@@ -142,13 +251,13 @@ options:[
 "عدد الطالبات كلهن ٦"
 ],
 correct:0,
-
 explanation:"التكرار يمثل عدد الطالبات في الفئة؛ أي إن ٦ طالبات قرأن عددًا من القصص يتراوح بين ٢٠ و٢٤."
 },
 
 {
+type:"choice",
 question:"ما الميزة الأساسية لتمثيل البيانات بطريقة الساق والورقة؟",
-
+instruction:"اختاري الإجابة الصحيحة.",
 options:[
 "يعرض النسب المئوية فقط",
 "ينظم البيانات ويحافظ على القيم الأصلية",
@@ -156,374 +265,351 @@ options:[
 "يستخدم للبيانات الوصفية فقط"
 ],
 correct:1,
-
 explanation:"يساعد تمثيل الساق والورقة على ترتيب البيانات العددية وعرض قيمها الأصلية في الوقت نفسه."
 }
 
 ];
 
 
+/* المستخدم */
 async function getCurrentUser(){
+  const {data:{user},error} = await supabaseClient.auth.getUser();
 
-const {data:{user},error} =
-await supabaseClient.auth.getUser();
+  if(error){
+    showError("حدث خطأ في معرفة المستخدم",error);
+    return null;
+  }
 
-if(error){
-showError("حدث خطأ في معرفة المستخدم",error);
-return null;
+  if(!user){
+    window.location.href="index.html";
+    return null;
+  }
+
+  return user;
 }
 
-if(!user){
-window.location.href="index.html";
-return null;
+
+/* توحيد الأرقام العربية والإنجليزية */
+function normalizeAnswer(value){
+  return String(value||"")
+    .replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d))
+    .replace(/[،]/g,",")
+    .replace(/\s+/g,"")
+    .replace(/[٫]/g,".")
+    .trim();
 }
 
-return user;
+
+/* التحقق من الإجابة */
+function isCorrectAnswer(question,index){
+  const answer=selectedAnswers[index];
+
+  if(question.type==="choice"){
+    return Number(answer)===question.correct;
+  }
+
+  const normalized=normalizeAnswer(answer);
+
+  return question.answers.some(
+    item=>normalizeAnswer(item)===normalized
+  );
 }
 
 
+/* عرض السؤال */
 function renderQuestion(){
+  const q=questions[currentQuestion];
+  const area=document.getElementById("quizArea");
+  const chosen=selectedAnswers[currentQuestion];
+  const progress=((currentQuestion+1)/questions.length)*100;
 
-const q=questions[currentQuestion];
-const area=document.getElementById("quizArea");
+  let html=`
+    <div class="progress">
+      السؤال ${currentQuestion+1} من ${questions.length}
+    </div>
 
-const chosen=selectedAnswers[currentQuestion];
+    <div class="progress-track">
+      <div class="progress-fill" style="width:${progress}%"></div>
+    </div>
 
-const progress=((currentQuestion+1)/questions.length)*100;
+    <div class="question">${q.question}</div>
 
-let html=`
+    ${q.diagram||""}
 
-<div class="progress">
-السؤال ${currentQuestion+1} من ${questions.length}
-</div>
+    <div class="instruction">${q.instruction||""}</div>
+  `;
 
-<div class="progress-track">
-<div class="progress-fill" style="width:${progress}%"></div>
-</div>
+  if(q.type==="choice"){
+    html+=`<div class="options">`;
 
-<div class="question">${q.question}</div>
+    q.options.forEach((option,index)=>{
+      html+=`
+        <label class="option ${chosen===index?'selected':''}">
+          <input type="radio"
+            name="answer"
+            value="${index}"
+            ${chosen===index?'checked':''}>
+          ${option}
+        </label>
+      `;
+    });
 
-<div class="instruction">
-اختاري إجابة واحدة صحيحة.
-</div>
+    html+=`</div>`;
+  }else{
+    html+=`
+      <input
+        class="answer-input"
+        id="writtenAnswer"
+        type="text"
+        autocomplete="off"
+        placeholder="${q.placeholder||'اكتبي إجابتك هنا'}"
+        value="${chosen??''}"
+      >
+    `;
+  }
 
-<div class="options">
-`;
+  html+=`
+    <div class="buttons">
+      <button class="back-btn"
+        onclick="previousQuestion()"
+        ${currentQuestion===0?'disabled':''}>
+        السابق
+      </button>
+  `;
 
-q.options.forEach((option,index)=>{
+  if(currentQuestion<questions.length-1){
+    html+=`
+      <button class="next-btn" onclick="nextQuestion()">
+        التالي
+      </button>
+    `;
+  }else{
+    html+=`
+      <button class="finish-btn" onclick="finishQuiz()">
+        إنهاء الاختبار
+      </button>
+    `;
+  }
 
-html+=`
+  html+=`</div>`;
+  area.innerHTML=html;
 
-<label class="option ${chosen===index?'selected':''}">
-
-<input type="radio"
-name="answer"
-value="${index}"
-${chosen===index?'checked':''}>
-
-${option}
-
-</label>
-`;
-
-});
-
-html+=`</div><div class="buttons">
-
-<button class="back-btn"
-onclick="previousQuestion()"
-${currentQuestion===0?'disabled':''}>
-السابق
-</button>`;
-
-if(currentQuestion<questions.length-1){
-
-html+=`<button class="next-btn"
-onclick="nextQuestion()">التالي</button>`;
-
-}else{
-
-html+=`<button class="finish-btn"
-onclick="finishQuiz()">إنهاء الاختبار</button>`;
-
+  if(q.type==="choice"){
+    area.querySelectorAll('input[name="answer"]').forEach(input=>{
+      input.addEventListener("change",()=>{
+        selectedAnswers[currentQuestion]=Number(input.value);
+        renderQuestion();
+      });
+    });
+  }else{
+    const input=document.getElementById("writtenAnswer");
+    input.addEventListener("input",()=>{
+      selectedAnswers[currentQuestion]=input.value;
+    });
+  }
 }
 
-html+=`</div>`;
 
-area.innerHTML=html;
+/* حفظ الإجابة الحالية */
+function saveCurrentAnswer(){
+  const q=questions[currentQuestion];
 
-area.querySelectorAll('input[name="answer"]').forEach(input=>{
-
-input.addEventListener("change",()=>{
-
-selectedAnswers[currentQuestion]=Number(input.value);
-
-renderQuestion();
-
-});
-
-});
-
+  if(q.type==="text"){
+    const input=document.getElementById("writtenAnswer");
+    if(input){
+      selectedAnswers[currentQuestion]=input.value.trim();
+    }
+  }
 }
 
 
 function nextQuestion(){
+  saveCurrentAnswer();
 
-if(selectedAnswers[currentQuestion]===undefined){
+  const answer=selectedAnswers[currentQuestion];
 
-alert("اختاري إجابة قبل الانتقال للسؤال التالي.");
+  if(answer===undefined || String(answer).trim()===""){
+    alert("أجيبي عن السؤال قبل الانتقال للسؤال التالي.");
+    return;
+  }
 
-return;
-
-}
-
-if(currentQuestion<questions.length-1){
-
-currentQuestion++;
-
-renderQuestion();
-
-}
-
+  if(currentQuestion<questions.length-1){
+    currentQuestion++;
+    renderQuestion();
+  }
 }
 
 
 function previousQuestion(){
+  saveCurrentAnswer();
 
-if(currentQuestion>0){
-
-currentQuestion--;
-
-renderQuestion();
-
-}
-
+  if(currentQuestion>0){
+    currentQuestion--;
+    renderQuestion();
+  }
 }
 
 
 function calculateScore(){
-
-return questions.reduce((sum,q,index)=>
-sum+(selectedAnswers[index]===q.correct?1:0),0);
-
+  return questions.reduce((sum,q,index)=>
+    sum+(isCorrectAnswer(q,index)?1:0),0);
 }
 
 
 function showError(title,error){
-
-document.getElementById("quizArea").innerHTML=`
-
-<div class="error-box">
-
-<div class="error-title">${title}</div>
-
-<div class="error-text">
-
-${error?.message||"خطأ غير معروف"}
-
-<br><br>
-
-Code: ${error?.code||"غير موجود"}
-
-<br>
-
-Details: ${error?.details||"غير موجود"}
-
-<br>
-
-Hint: ${error?.hint||"غير موجود"}
-
-</div>
-
-</div>`;
-
+  document.getElementById("quizArea").innerHTML=`
+    <div class="error-box">
+      <div class="error-title">${title}</div>
+      <div class="error-text">
+        ${error?.message||"خطأ غير معروف"}
+        <br><br>
+        Code: ${error?.code||"غير موجود"}
+        <br>
+        Details: ${error?.details||"غير موجود"}
+        <br>
+        Hint: ${error?.hint||"غير موجود"}
+      </div>
+    </div>
+  `;
 }
 
 
+/* إنهاء الاختبار وحفظ النتيجة */
 async function finishQuiz(){
-
-if(selectedAnswers[currentQuestion]===undefined){
-
-alert("اختاري إجابة السؤال الأخير قبل إنهاء الاختبار.");
-
-return;
-
-}
-
-const unanswered=questions.findIndex((q,index)=>
-selectedAnswers[index]===undefined);
-
-if(unanswered!==-1){
-
-currentQuestion=unanswered;
-
-renderQuestion();
-
-alert("أجيبي عن جميع الأسئلة قبل إرسال الاختبار.");
-
-return;
-
-}
-
-const area=document.getElementById("quizArea");
-
-area.innerHTML='<div class="loading">جارٍ حفظ نتيجتك...</div>';
-
-const user=await getCurrentUser();
-
-if(!user)return;
-
-const score=calculateScore();
-
-const total=questions.length;
-
-const percentage=Math.round(score/total*100);
-
-
-const {data:previousAttempts,error:previousError} =
-await supabaseClient
-
-.from("quiz_results")
-.select("id")
-.eq("user_id",user.id)
-.eq("quiz_id",quizId);
-
-
-if(previousError){
-
-showError("حدث خطأ أثناء قراءة محاولات الاختبار",previousError);
-
-return;
-
-}
-
-
-const attemptNumber=(previousAttempts?.length||0)+1;
-
-
-const {data:insertedData,error} =
-await supabaseClient
-
-.from("quiz_results")
-
-.insert({
-
-user_id:user.id,
-
-quiz_id:quizId,
-
-score:score,
-
-total:total,
-
-completed_at:new Date().toISOString()
-
-})
-
-.select();
-
-
-if(error){
-
-showError("حدث خطأ أثناء حفظ نتيجة الاختبار",error);
-
-return;
-
-}
-
-
-let message=percentage===100
-?"ممتاز جدًا! جميع إجاباتك صحيحة 🎉"
-:percentage>=70
-?"أحسنتِ! لديكِ فهم جيد للدرس 🌷"
-:"بداية جيدة! راجعي التصحيح وحاولي تحسين نتيجتك 💗";
-
-
-let review='<div class="review"><h3>تصحيح إجاباتك</h3>';
-
-questions.forEach((q,index)=>{
-
-const isCorrect=selectedAnswers[index]===q.correct;
-
-const chosenText=q.options[selectedAnswers[index]];
-
-const correctText=q.options[q.correct];
-
-review+=`
-
-<div class="review-item ${isCorrect?'good':'bad'}">
-
-<strong>
-السؤال ${index+1} — ${isCorrect?'إجابة صحيحة ✓':'إجابة غير صحيحة ✗'}
-</strong>
-
-<div>${q.question}</div>
-
-<div class="${isCorrect?'answer-correct':'answer-wrong'}">
-إجابتك: ${chosenText}
-</div>
-
-${!isCorrect?`
-<div class="answer-correct">
-الإجابة الصحيحة: ${correctText}
-</div>`:''}
-
-<div class="explanation">${q.explanation}</div>
-
-</div>`;
-
-});
-
-review+='</div>';
-
-
-area.innerHTML=`
-
-<div class="result">
-
-<div class="question">انتهى الاختبار 🎉</div>
-
-<div class="score">${score} / ${total}</div>
-
-<div class="message">${message}</div>
-
-<p>النسبة: <strong>${percentage}%</strong></p>
-
-<p style="color:#777;font-size:14px">
-المحاولة رقم ${attemptNumber} — تم حفظ نتيجتك.
-</p>
-
-<div class="buttons" style="justify-content:center">
-
-<button class="back-btn" onclick="location.reload()">
-إعادة الاختبار
-</button>
-
-<a href="lesson.html?lesson=7" class="home-btn">
-العودة إلى الدرس
-</a>
-
-</div>
-
-</div>
-
-${review}`;
-
-area.scrollIntoView({behavior:"smooth",block:"start"});
-
+  saveCurrentAnswer();
+
+  const unanswered=questions.findIndex((q,index)=>
+    selectedAnswers[index]===undefined ||
+    String(selectedAnswers[index]).trim()===""
+  );
+
+  if(unanswered!==-1){
+    currentQuestion=unanswered;
+    renderQuestion();
+    alert("أجيبي عن جميع الأسئلة قبل إرسال الاختبار.");
+    return;
+  }
+
+  const area=document.getElementById("quizArea");
+  area.innerHTML='<div class="loading">جارٍ حفظ نتيجتك...</div>';
+
+  const user=await getCurrentUser();
+  if(!user)return;
+
+  const score=calculateScore();
+  const total=questions.length;
+  const percentage=Math.round(score/total*100);
+
+  const {data:previousAttempts,error:previousError}=
+    await supabaseClient
+      .from("quiz_results")
+      .select("id")
+      .eq("user_id",user.id)
+      .eq("quiz_id",quizId);
+
+  if(previousError){
+    showError("حدث خطأ أثناء قراءة محاولات الاختبار",previousError);
+    return;
+  }
+
+  const attemptNumber=(previousAttempts?.length||0)+1;
+
+  const {error}=await supabaseClient
+    .from("quiz_results")
+    .insert({
+      user_id:user.id,
+      quiz_id:quizId,
+      score:score,
+      total:total,
+      completed_at:new Date().toISOString()
+    });
+
+  if(error){
+    showError("حدث خطأ أثناء حفظ نتيجة الاختبار",error);
+    return;
+  }
+
+  let message=percentage===100
+    ?"ممتاز جدًا! جميع إجاباتك صحيحة 🎉"
+    :percentage>=70
+    ?"أحسنتِ! لديكِ فهم جيد للدرس 🌷"
+    :"بداية جيدة! راجعي التصحيح وحاولي تحسين نتيجتك 💗";
+
+  let review='<div class="review"><h3>تصحيح إجاباتك</h3>';
+
+  questions.forEach((q,index)=>{
+    const correct=isCorrectAnswer(q,index);
+
+    let studentAnswer="";
+    let correctAnswer="";
+
+    if(q.type==="choice"){
+      studentAnswer=q.options[Number(selectedAnswers[index])];
+      correctAnswer=q.options[q.correct];
+    }else{
+      studentAnswer=selectedAnswers[index];
+      correctAnswer=q.displayAnswer;
+    }
+
+    review+=`
+      <div class="review-item ${correct?'good':'bad'}">
+        <strong>
+          السؤال ${index+1} — ${correct?'إجابة صحيحة ✓':'إجابة غير صحيحة ✗'}
+        </strong>
+
+        <div>${q.question}</div>
+
+        <div class="${correct?'answer-correct':'answer-wrong'}">
+          إجابتك: ${studentAnswer}
+        </div>
+
+        ${!correct?`
+          <div class="answer-correct">
+            الإجابة الصحيحة: ${correctAnswer}
+          </div>
+        `:''}
+
+        <div class="explanation">${q.explanation}</div>
+      </div>
+    `;
+  });
+
+  review+='</div>';
+
+  area.innerHTML=`
+    <div class="result">
+      <div class="question">انتهى الاختبار 🎉</div>
+      <div class="score">${score} / ${total}</div>
+      <div class="message">${message}</div>
+      <p>النسبة: <strong>${percentage}%</strong></p>
+      <p style="color:#777;font-size:14px">
+        المحاولة رقم ${attemptNumber} — تم حفظ نتيجتك.
+      </p>
+
+      <div class="buttons" style="justify-content:center">
+        <button class="back-btn" onclick="location.reload()">
+          إعادة الاختبار
+        </button>
+
+        <a href="lesson.html?lesson=7" class="home-btn">
+          العودة إلى الدرس
+        </a>
+      </div>
+    </div>
+
+    ${review}
+  `;
+
+  area.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 
+/* بدء الاختبار */
 getCurrentUser().then(user=>{
-
-if(user){
-
-renderQuestion();
-
-}
-
+  if(user){
+    renderQuestion();
+  }
 });
-
 </script>
 </body>
 </html>
