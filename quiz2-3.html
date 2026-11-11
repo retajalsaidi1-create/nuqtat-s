@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار الدرس ٢-٣ | نقطة س</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#fff7fa;color:#3f3540;line-height:1.8}.container{width:min(940px,92%);margin:30px auto}.header{text-align:center;margin-bottom:24px}.header h1{color:#9b657d;margin-bottom:5px}.header p{color:#777;margin:0}.quiz-card{background:#fff;border-radius:20px;padding:25px;box-shadow:0 5px 25px #00000012}.progress{color:#9b657d;font-weight:bold}.progress-track{height:8px;background:#f2e5eb;border-radius:20px;margin:8px 0 22px;overflow:hidden}.progress-fill{height:100%;background:#dba8bd;border-radius:20px;transition:width .2s}.question{font-size:19px;font-weight:bold;line-height:1.9;margin:12px 0}.instruction{background:#fff0f5;padding:12px 15px;border-radius:12px;margin:14px 0;color:#765665}.diagram{background:#fffafd;border:1px solid #eadce3;border-radius:15px;padding:16px;margin:17px 0;text-align:center;overflow-x:auto}.diagram table{border-collapse:collapse;margin:auto;min-width:250px}.diagram th,.diagram td{border:1px solid #d9bdca;padding:8px 14px;text-align:center}.diagram th{background:#fbeaf1;color:#765665}.options{display:grid;gap:10px}.option{display:block;border:2px solid #eadce3;border-radius:13px;padding:11px 14px;cursor:pointer;background:#fff}.option.selected{border-color:#9b657d;background:#fbeaf1}.option input{margin-left:9px;accent-color:#9b657d}.answer-input{width:100%;padding:13px;border:2px solid #eadce3;border-radius:12px;font-size:17px;font-family:Arial;text-align:center;outline:none;background:#fff;margin:5px 0}.answer-input:focus{border-color:#9b657d}.field-label{display:block;font-weight:bold;margin-top:12px;color:#765665}.buttons{display:flex;justify-content:space-between;gap:12px;margin-top:25px}button{border:0;border-radius:12px;padding:12px 22px;font-size:16px;cursor:pointer;font-weight:bold}.next-btn,.finish-btn,.home-btn{background:#9b657d;color:#fff}.back-btn{background:#eee5e9;color:#5d4b55}button:disabled{opacity:.45;cursor:not-allowed}.chart-wrap{background:#fff;border:1px solid #eadce3;border-radius:14px;padding:12px;margin:15px 0}.bars{height:230px;display:flex;align-items:flex-end;justify-content:space-around;gap:10px;border-bottom:2px solid #765665;padding:10px 8px 0;background:repeating-linear-gradient(to top,#f1e6eb 0,#f1e6eb 1px,transparent 1px,transparent 25%)}.bar-col{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;flex:1;min-width:35px}.bar{width:min(48px,75%);background:#dba8bd;border-radius:7px 7px 0 0;transition:height .2s;min-height:2px}.bar-value{font-size:13px;color:#765665;font-weight:bold}.bar-name{font-size:12px;margin-top:7px;white-space:nowrap}.slider-row{display:grid;grid-template-columns:100px 1fr 35px;align-items:center;gap:10px;margin:12px 0;text-align:right}.slider-row input{width:100%;accent-color:#9b657d}.result{text-align:center}.score{font-size:42px;font-weight:bold;color:#9b657d;margin:12px}.review{text-align:right;margin-top:25px}.review-item{border:1px solid #eadce3;border-radius:13px;padding:13px;margin:12px 0;background:#fff}.review-item.good{border-right:5px solid #65a879}.review-item.bad{border-right:5px solid #d87575}.answer-correct{color:#287844;font-weight:bold}.answer-wrong{color:#b33a3a}.explanation{color:#665962;font-size:14px;margin-top:7px}.error-box{background:#fff0f0;border:2px solid #e5a5a5;border-radius:15px;padding:18px;margin-top:20px;overflow-wrap:anywhere}.loading{text-align:center;padding:40px}.small-note{font-size:13px;color:#806b77}@media(max-width:600px){.container{margin:20px auto}.quiz-card{padding:17px}.question{font-size:17px}.buttons button{padding:11px 14px}.slider-row{grid-template-columns:85px 1fr 28px}.bar-name{font-size:10px}}
+</style></head>
+<body><div class="container"><div class="header"><h1>اختبار الدرس ٢-٣</h1><p>التمثيل بالأعمدة البيانية | نقطة س</p></div><div id="quizArea" class="quiz-card"><div class="loading">جاري تحميل الاختبار...</div></div></div>
+<script>
+const SUPABASE_URL="https://nqtuiuglxabkyjlkmnhl.supabase.co";
+const SUPABASE_KEY="sb_publishable_ZHAJVrsRkWrgtGdqr7vrzA_c1LnyEPV";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const quizId=3;
+let currentQuestion=0, answers={}, liveData={};
+
+const questions=[
+{title:"السؤال الأول: قراءة الأعمدة البيانية",explanation:"من الرسم: يناير ٢٥، أبريل ٤٠، يونيو ٤٥، وأكتوبر ٣٦ درجة. أعلى متوسط في يونيو، والفرق بين أكتوبر ويناير = ٣٦ − ٢٥ = ١١ درجة.",check:()=>norm(answers[0]?.a)==="ابريل"&&norm(answers[0]?.b)==="يونيو"&&norm(answers[0]?.c)==="11",display:()=>`أبريل: ${answers[0]?.a||'—'}، الشهر الأعلى: ${answers[0]?.b||'—'}، الفرق: ${answers[0]?.c||'—'}`},
+{title:"السؤال الثاني: أنشئي تمثيلًا بالأعمدة",explanation:"القيم الصحيحة حسب الجدول: التاريخ ١٥، الأدب ١٠، العلوم ١٢، تطوير الذات ٨. حرّكي المؤشرات حتى تطابقي قيم الجدول، وسيُبنى الرسم أمامك.",check:()=>[15,10,12,8].every((v,i)=>Number(liveData[i])===v),display:()=>"القيم التي أنشأتها الطالبة في الرسم البياني"},
+{title:"السؤال الثالث: قراءة تمثيل وقت العصر",explanation:"عدد الطلاب = ١٠ + ١٨ + ٢٠ + ١٢ = ٦٠ طالبًا.",check:()=>norm(answers[2]?.a)==="60",display:()=>`إجابتك: ${answers[2]?.a||'—'}`},
+{title:"السؤال الرابع: إكمال الجدول والرسم",explanation:"القيم الناقصة: الحبار ٨، الشراغة ١٦، الروبيان ٢٠، والهامور ١٢. أكملي القيم ليظهر التمثيل بالأعمدة.",check:()=>[8,16,20,12].every((v,i)=>Number(answers[3]?.[i])===v),display:()=>`القيم المدخلة: ${(answers[3]||[]).join('، ')}`},
+{title:"السؤال الخامس: قراءة التمثيل بالصور",explanation:"المفتاح في التمثيل يوضح أن كل صورة تمثل ٢٥ طالبًا. عدد صور الصف الحادي عشر ٩ صور، أي ٩ × ٢٥ = ٢٢٥ طالبًا؛ لذلك الصف الذي يبلغ ٢٢٥ طالبًا هو الصف الحادي عشر.",check:()=>norm(answers[4]?.a)==="225"&&norm(answers[4]?.b).includes("الحاديعشر"),display:()=>`عدد طلاب الصف ١١: ${answers[4]?.a||'—'}، الصف: ${answers[4]?.b||'—'}`},
+{title:"السؤال السادس: قراءة التمثيل البياني للتحويل",explanation:"من خط التحويل: ٦٠ ريالًا عمانيًا تعادل ١٥٦ دولارًا أمريكيًا. و١٠٠ ريال عماني تعادل ٢٦٠ دولارًا؛ لذا سعر ٢٠٨ دولارات في الولايات المتحدة أقل من ٢٦٠ دولارًا، والشراء من الولايات المتحدة أفضل من حيث السعر.",check:()=>norm(answers[5]?.a)==="156"&&norm(answers[5]?.b).includes("الولاياتالمتحدة"),display:()=>`قيمة ٦٠ ريالًا: ${answers[5]?.a||'—'} دولار، الأفضل: ${answers[5]?.b||'—'}`}
+];
+
+function norm(v){return String(v??'').toLowerCase().replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[أإآ]/g,'ا').replace(/[ًٌٍَُِّْ]/g,'').replace(/[^a-z0-9\u0600-\u06FF]/g,'').trim()}
+function chart(values,names,max=50){return `<div class="chart-wrap"><div class="bars">${values.map((v,i)=>`<div class="bar-col"><div class="bar-value">${v}</div><div class="bar" style="height:${Math.max(2,Number(v)/max*78)}%"></div><div class="bar-name">${names[i]}</div></div>`).join('')}</div></div>`}
+function temperatureChart(){return chart([25,40,45,36],["يناير","أبريل","يونيو","أكتوبر"],50)}
+function readingChart(){return chart([15,10,12,8],["التاريخ","الأدب","العلوم","تطوير الذات"],20)}
+function leisureChart(){return chart([10,18,20,12],["الاسترخاء","الهاتف","الرياضة","المذاكرة"],25)}
+function conversionChart(){return `<div class="diagram"><b>سعر الصرف: الريال العماني والدولار الأمريكي</b><div style="direction:ltr">${chart([52,104,156,208,260],["20","40","60","80","100"],280)}</div><p class="small-note">المحور الأفقي: الريال العماني — المحور الرأسي: الدولار الأمريكي</p></div>`}
+
+function renderQuestion(){
+const area=document.getElementById('quizArea'),q=currentQuestion,progress=(q+1)/questions.length*100;
+let h=`<div class="progress">السؤال ${q+1} من ${questions.length}</div><div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div><div class="question">${questions[q].title}</div>`;
+
+if(q===0){
+h+=`<div class="instruction">تعرض الأعمدة البيانية متوسط درجات الحرارة لبعض شهور السنة. أجيبي عن الفقرات الثلاث.</div>${temperatureChart()}
+<label class="field-label">١) ضعي دائرة حول قيمة شهر أبريل (درجة الحرارة).</label>
+<div class="options">${["٢٥","٤٠","٤٥","٣٦"].map(x=>`<label class="option ${answers[0]?.a===x?'selected':''}"><input type="radio" name="q1a" value="${x}" ${answers[0]?.a===x?'checked':''}> ${x}</label>`).join('')}</div>
+<label class="field-label">٢) في أي شهر درجة الحرارة مرتفعة جدًا؟</label>
+<div class="options">${["يناير","أبريل","يونيو","أكتوبر"].map(x=>`<label class="option ${answers[0]?.b===x?'selected':''}"><input type="radio" name="q1b" value="${x}" ${answers[0]?.b===x?'checked':''}> ${x}</label>`).join('')}</div>
+<label class="field-label">٣) بكم تزيد درجة الحرارة في أكتوبر عن يناير؟</label>
+<input class="answer-input" id="q1c" placeholder="الفرق بالدرجات" value="${answers[0]?.c||''}">`;
+}
+
+if(q===1){
+h+=`<div class="instruction">أجري أخصائي مصادر التعلم دراسة على طلاب الصف العاشر لمعرفة مجال القراءة المفضل. أنشئي تمثيلًا بيانيًا بالأعمدة للبيانات الآتية.</div>
+<div class="diagram"><table><tr><th>مجال القراءة</th><th>التكرار</th></tr><tr><td>التاريخ</td><td>١٥</td></tr><tr><td>الأدب</td><td>١٠</td></tr><tr><td>العلوم</td><td>١٢</td></tr><tr><td>تطوير الذات</td><td>٨</td></tr></table></div>
+<b>ابني الأعمدة بتحريك المؤشرات:</b>
+<div id="builderChart">${chart([liveData[0]??0,liveData[1]??0,liveData[2]??0,liveData[3]??0],["التاريخ","الأدب","العلوم","تطوير الذات"],20)}</div>
+${[["التاريخ",15],["الأدب",10],["العلوم",12],["تطوير الذات",8]].map(([n,v],i)=>`<div class="slider-row"><b>${n}</b><input type="range" min="0" max="20" step="1" value="${liveData[i]??0}" id="slider${i}"><span id="val${i}">${liveData[i]??0}</span></div>`).join('')}
+<p class="small-note">عدّلي ارتفاع كل عمود حتى يطابق بيانات الجدول.</p>`;
+}
+
+if(q===2){
+h+=`<div class="instruction">تعرض الأعمدة البيانية المقابلة قضاء وقت العصر لطلاب الصف التاسع. أوجدي عدد طلاب الصف التاسع كم يمثل التمثيل.</div>${leisureChart()}
+<label class="field-label">مجموع عدد الطلاب:</label><input class="answer-input" id="q3a" placeholder="عدد الطلاب" value="${answers[2]?.a||''}">`;
+}
+
+if(q===3){
+h+=`<div class="instruction">يبين الجدول التمثيل بالأعمدة للأكلة البحرية المفضلة لدى بعض الشباب. أكملي بيانات الجدول، ثم أكملي رسم الأعمدة الناقصة.</div>
+<div class="diagram"><table><tr><th>الأكلة البحرية</th><th>عدد الشباب</th></tr><tr><td>الكند</td><td>٢٨</td></tr><tr><td>الحبار</td><td>٨</td></tr><tr><td>الشراغة</td><td>١٦</td></tr><tr><td>الروبيان</td><td>٢٠</td></tr><tr><td>الهامور</td><td>١٢</td></tr></table></div>
+<b>أكملي القيم الناقصة في الجدول:</b>
+${[["الحبار",8],["الشراغة",16],["الروبيان",20],["الهامور",12]].map(([n,v],i)=>`<label class="field-label">${n}</label><input class="answer-input" type="number" id="q4_${i}" placeholder="عدد الشباب" value="${answers[3]?.[i]??''}">`).join('')}
+<b>الرسم البياني يتحدث مع إجاباتك:</b>
+<div id="q4chart">${chart([28,answers[3]?.[0]||0,answers[3]?.[1]||0,answers[3]?.[2]||0,answers[3]?.[3]||0],["الكند","الحبار","الشراغة","الروبيان","الهامور"],30)}</div>`;
+}
+
+if(q===4){
+h+=`<div class="instruction">يمثل الشكل عدد طلاب مدرسة ما بالصور. المفتاح: كل صورة تمثل ٢٥ طالبًا.</div>
+<div class="diagram"><b>عدد الطلاب في كل صف</b><table><tr><th>الصف</th><th>التمثيل بالصور</th></tr>
+${[["الثامن",8],["التاسع",6],["العاشر",8],["الحادي عشر",9],["الثاني عشر",8]].map(([n,c])=>`<tr><td>${n}</td><td style="font-size:20px;letter-spacing:2px">${'👤 '.repeat(c)}</td></tr>`).join('')}
+</table><p class="small-note">المفتاح: 👤 = ٢٥ طالبًا</p></div>
+<label class="field-label">١) ما عدد طلاب الصف الحادي عشر؟</label><input class="answer-input" id="q5a" placeholder="عدد الطلاب" value="${answers[4]?.a||''}">
+<label class="field-label">٢) أي صف يبلغ عدد طلابه ٢٢٥ طالبًا؟</label>
+<div class="options">${["الصف الثامن","الصف التاسع","الصف العاشر","الصف الحادي عشر","الصف الثاني عشر"].map(x=>`<label class="option ${answers[4]?.b===x?'selected':''}"><input type="radio" name="q5b" value="${x}" ${answers[4]?.b===x?'checked':''}>${x}</label>`).join('')}</div>`;
+}
+
+if(q===5){
+h+=`<div class="instruction">سافر محمد إلى الولايات المتحدة الأمريكية لقضاء الإجازة الصيفية. التمثيل البياني يوضح التحويل بين الريال العماني والدولار الأمريكي.</div>${conversionChart()}
+<label class="field-label">١) كم يعادل مبلغ ٦٠ ريالًا عمانيًا؟</label><input class="answer-input" id="q6a" placeholder="بالدولار الأمريكي" value="${answers[5]?.a||''}">
+<label class="field-label">٢) إذا كان سعر الهاتف المحمول في الولايات المتحدة ٢٠٨ دولارات أمريكية وسعر نفس الهاتف في مسقط ١٠٠ ريال عماني، فأي الجهازين أفضل من حيث السعر؟ فسري إجابتك.</label>
+<div class="options">${["الشراء من الولايات المتحدة","الشراء من مسقط"].map(x=>`<label class="option ${answers[5]?.b===x?'selected':''}"><input type="radio" name="q6b" value="${x}" ${answers[5]?.b===x?'checked':''}>${x}</label>`).join('')}</div>`;
+}
+
+h+=`<div class="buttons"><button class="back-btn" onclick="previousQuestion()" ${q===0?'disabled':''}>السابق</button>${q<5?`<button class="next-btn" onclick="nextQuestion()">التالي</button>`:`<button class="finish-btn" onclick="finishQuiz()">إنهاء الاختبار</button>`}</div>`;
+area.innerHTML=h;
+attachInputs();
+}
+
+function attachInputs(){
+const q=currentQuestion;
+if(q===0){
+document.querySelectorAll('input[name="q1a"]').forEach(x=>x.onchange=()=>{answers[0]={...(answers[0]||{}),a:x.value};document.querySelectorAll('input[name="q1a"]').forEach(y=>y.closest('.option').classList.toggle('selected',y.checked));});
+document.querySelectorAll('input[name="q1b"]').forEach(x=>x.onchange=()=>{answers[0]={...(answers[0]||{}),b:x.value};document.querySelectorAll('input[name="q1b"]').forEach(y=>y.closest('.option').classList.toggle('selected',y.checked));});
+document.getElementById('q1c').oninput=e=>answers[0]={...(answers[0]||{}),c:e.target.value};
+}
+if(q===1){
+for(let i=0;i<4;i++){
+document.getElementById('slider'+i).oninput=e=>{
+liveData[i]=Number(e.target.value);
+document.getElementById('val'+i).textContent=e.target.value;
+document.getElementById('builderChart').innerHTML=chart([0,1,2,3].map(j=>liveData[j]??0),["التاريخ","الأدب","العلوم","تطوير الذات"],20);
+};
+}
+}
+if(q===2)document.getElementById('q3a').oninput=e=>answers[2]={a:e.target.value};
+if(q===3){
+for(let i=0;i<4;i++)document.getElementById('q4_'+i).oninput=()=>{
+answers[3]=[0,1,2,3].map(j=>document.getElementById('q4_'+j)?.value??'');
+document.getElementById('q4chart').innerHTML=chart([28,...answers[3].map(x=>Number(x)||0)],["الكند","الحبار","الشراغة","الروبيان","الهامور"],30);
+};
+}
+if(q===4){
+document.getElementById('q5a').oninput=e=>answers[4]={...(answers[4]||{}),a:e.target.value};
+document.querySelectorAll('input[name="q5b"]').forEach(x=>x.onchange=()=>{answers[4]={...(answers[4]||{}),b:x.value};document.querySelectorAll('input[name="q5b"]').forEach(y=>y.closest('.option').classList.toggle('selected',y.checked));});
+}
+if(q===5){
+document.getElementById('q6a').oninput=e=>answers[5]={...(answers[5]||{}),a:e.target.value};
+document.querySelectorAll('input[name="q6b"]').forEach(x=>x.onchange=()=>{answers[5]={...(answers[5]||{}),b:x.value};document.querySelectorAll('input[name="q6b"]').forEach(y=>y.closest('.option').classList.toggle('selected',y.checked));});
+}
+}
+
+function hasAnswer(i){
+if(i===0)return !!(answers[0]?.a&&answers[0]?.b&&String(answers[0]?.c||'').trim());
+if(i===1)return [0,1,2,3].every(j=>liveData[j]!==undefined);
+if(i===2)return !!String(answers[2]?.a||'').trim();
+if(i===3)return [0,1,2,3].every(j=>String(answers[3]?.[j]??'').trim()!=='');
+if(i===4)return !!(answers[4]?.a&&answers[4]?.b);
+if(i===5)return !!(answers[5]?.a&&answers[5]?.b);
+return false;
+}
+
+function nextQuestion(){
+if(!hasAnswer(currentQuestion)){alert('أكملي إجابة السؤال قبل الانتقال.');return;}
+currentQuestion++;
+renderQuestion();
+}
+function previousQuestion(){if(currentQuestion>0){currentQuestion--;renderQuestion();}}
+
+async function getCurrentUser(){
+const {data:{user},error}=await supabaseClient.auth.getUser();
+if(error){showError('حدث خطأ في معرفة المستخدم',error);return null;}
+if(!user){window.location.href='index.html';return null;}
+return user;
+}
+
+function showError(title,error){
+document.getElementById('quizArea').innerHTML=`<div class="error-box"><b>${title}</b><p>${error?.message||'خطأ غير معروف'}</p></div>`;
+}
+
+async function finishQuiz(){
+const missing=questions.findIndex((_,i)=>!hasAnswer(i));
+if(missing!==-1){currentQuestion=missing;renderQuestion();alert('أكملي جميع أجزاء الأسئلة قبل إرسال الاختبار.');return;}
+const area=document.getElementById('quizArea');
+area.innerHTML='<div class="loading">جارٍ حفظ نتيجتك...</div>';
+const user=await getCurrentUser();
+if(!user)return;
+const score=questions.reduce((s,q,i)=>s+(q.check()?1:0),0);
+const total=questions.length;
+const percentage=Math.round(score/total*100);
+const {data:previousAttempts,error:prevErr}=await supabaseClient.from('quiz_results').select('id').eq('user_id',user.id).eq('quiz_id',quizId);
+if(prevErr){showError('حدث خطأ أثناء قراءة محاولات الاختبار',prevErr);return;}
+const attemptNumber=(previousAttempts?.length||0)+1;
+const {error}=await supabaseClient.from('quiz_results').insert({user_id:user.id,quiz_id:quizId,score,total,completed_at:new Date().toISOString()});
+if(error){showError('حدث خطأ أثناء حفظ نتيجة الاختبار',error);return;}
+let message=percentage===100?'ممتاز جدًا! جميع إجاباتك صحيحة 🎉':percentage>=70?'أحسنتِ! لديكِ فهم جيد للدرس 🌷':'بداية جيدة! راجعي التصحيح وحاولي تحسين نتيجتك 💗';
+let review='<div class="review"><h3>تصحيح إجاباتك</h3>';
+questions.forEach((q,i)=>{
+const ok=q.check();
+review+=`<div class="review-item ${ok?'good':'bad'}"><b>السؤال ${i+1} — ${ok?'إجابة صحيحة ✓':'تحتاج إلى مراجعة ✗'}</b><div>${q.display()}</div><div class="explanation">${q.explanation}</div></div>`;
+});
+review+='</div>';
+area.innerHTML=`<div class="result"><div class="question">انتهى الاختبار 🎉</div><div class="score">${score} / ${total}</div><div>${message}</div><p>النسبة: <b>${percentage}%</b></p><p class="small-note">المحاولة رقم ${attemptNumber} — تم حفظ نتيجتك.</p><div class="buttons" style="justify-content:center"><button class="back-btn" onclick="location.reload()">إعادة الاختبار</button><a href="lesson.html?lesson=8" class="home-btn">العودة إلى الدرس</a></div></div>${review}`;
+area.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+getCurrentUser().then(user=>{if(user)renderQuestion();});
+</script>
+</body>
+</html>
