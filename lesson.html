@@ -760,12 +760,15 @@ document
         await recordActivity(user, "quiz");
 
         // ربط كل درس بملف الاختبار الخاص به
-        const quizPages = {
+  const quizPages = {
 
-            "6": "quiz.html?lesson=6",
+    "6": "quiz.html?lesson=6",
 
-            "7": "quiz2-2.html?lesson=7"
+    "7": "quiz2-2.html?lesson=7",
 
+    "8": "quiz2-3.html"
+
+};
         };
 
         const quizLink = quizPages[lessonNumber];
