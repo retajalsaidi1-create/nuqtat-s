@@ -742,11 +742,7 @@ const lessonVideos = {
                     );
 
 
-                /* ==================================
-                   زر الاختبار
-                ================================== */
 
-                
 /* ==================================
    زر الاختبار
 ================================== */
@@ -759,31 +755,22 @@ document
 
         await recordActivity(user, "quiz");
 
-        // ربط كل درس بملف الاختبار الخاص به
-  const quizPages = {
-
-    "6": "quiz.html?lesson=6",
-
-    "7": "quiz2-2.html?lesson=7",
-
-    "8": "quiz2-3.html"
-
-};
+        const quizPages = {
+            "6": "quiz.html?lesson=6",
+            "7": "quiz2-2.html?lesson=7",
+            "8": "quiz2-3.html"
         };
 
         const quizLink = quizPages[lessonNumber];
 
         if (quizLink) {
-
             window.location.href = quizLink;
-
         } else {
-
             alert("اختبار هذا الدرس غير متوفر حاليًا 🌷");
-
         }
 
     });
+
 
 
                 /* ==================================
